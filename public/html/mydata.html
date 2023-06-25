@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>CSMA APP</title>
+	<link rel="manifest" href="/public/html/manifest.json">
+	<!-- <link rel="stylesheet" href="/public/css/stylepwa.css"> -->
+	<link rel="icon" href="/public/favicon.ico" type="image/x-icon" />
+	<link rel="apple-touch-icon" href="/public/images/hello-icon-152.png">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="white" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-title" content="CSMA App">
+	<meta name="msapplication-TileImage" content="/public/images/hello-icon-144.png">
+	<meta name="msapplication-TileColor" content="#FFFFFF">
+	<meta name="description" content="CSMA APP, Sleep Therapy Tracker App">
+
+
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="/public/css/loginstyle.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"
+		integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY=" crossorigin="anonymous"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+
+	<!-- <script src="https://code.highcharts.com/highcharts.js"></script>
+		<script src="https://code.highcharts.com/modules/series-label.js"></script>
+		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+		<script src="https://code.highcharts.com/modules/export-data.js"></script>
+		<script src="https://code.highcharts.com/modules/accessibility.js"></script> -->
+
+	<script src="https://code.highcharts.com/stock/highstock.js"></script>
+	<script src="https://code.highcharts.com/stock/highcharts-more.js"></script>
+	<script src="https://code.highcharts.com/modules/boost.js"></script>
+	<!--<script src="https://code.highcharts.com/stock/modules/data.js"></script>-->
+	<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+	<script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+	<script src="https://code.highcharts.com/modules/annotations.js"></script>
+	<script src="https://blacklabel.github.io/custom_events/js/customEvents.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.13/moment-timezone-with-data-2012-2022.min.js"></script>
+
+		<!-- <script src="https://cdn.jsdelivr.net/npm/pdfkit@0.10.0/js/pdfkit.standalone.js"></script>
+		<script src="https://bundle.run/blob-stream@0.1.3"></script>
+		<script src="https://cdn.jsdelivr.net/npm/svg-to-pdfkit@0.1.8/source.js"></script> -->
+
+
+	<script src="/public/js/main.js"></script>
+	<script src="/public/js/config.js"></script>
+	<script src="/public/js/chart.js"></script>
+	<script src="/public/js/sleep-graph.js"></script>
+	<script src="/public/js/app-data.js"></script>
+
+	<style>
+		.axislistClass option {
+			font-size: 12px;
+		}
+
+		.highcharts-scrollbar {
+			display: none
+		}
+
+		.axislistClass {
+			font-size: 12px;
+			position: absolute;
+			display: none;
+			z-index: 99;
+		}
+
+		.xmin,
+		.xmax {
+			font-size: 12px;
+			position: absolute;
+			z-index: 99;
+		}
+
+		.backward-forward {
+			display: none;
+			position: absolute;
+			z-index: 999;
+			color: white;
+			width: 0px;
+			height: 0px;
+			border: 22px solid black;
+			border-top-color: transparent;
+			border-bottom-color: transparent;
+		}
+
+		.back-chart {
+			border-left-color: transparent;
+			border-right-color: palevioletred;
+			left: 0%;
+		}
+
+		.forward-chart {
+			border-right-color: transparent;
+			border-left-color: palevioletred;
+			right: 0%;
+		}
+
+		.highcharts-tooltip {
+			z-index: 100
+		}
+	</style>
+
+</head>
+
+<body class="fullscreen">
+
+
+	<div class="container" id="reportpage">
+		<div class="row justify-content-center">
+			<!-- <div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section">AutoCheck Report </h2> <a
+						href="/public/report/sample_autocheck_report.html" target="_blank" style="color:blue">See a
+						sample</a>
+				</div> -->
+		</div>
+
+		<div class="row ">
+
+
+			<div class="wrap">
+
+				<div id="left-slider"></div>
+
+				<div class="w3-teal" style="width:100%">
+					<button class="w3-button w3-teal w3-xlarge" onclick="w3_open()"
+						style="font-size:38px">&#9776;</button>
+
+					<h3 class="mb-4" style="display:inline; color:white;" id="pageTitle">My Data</h3>
+					<img id="app-logo" src="/public/images/logo.jpg"
+						style="position: absolute;    top: 5px;    right: 0; height:60px" />
+				</div>
+				<!-- <div class="img" style="background-image: url(/public/images/bg-1.jpg);"></div> -->
+
+
+				<!-- <div >
+              <a href="#test">
+                <img src="/public/images/therapy/back.png" width="100" />
+           </a>
+            </div> -->
+				<div class="login-wrap p-4 p-md-5 justify-content-center" onclick="w3_close()">
+					<a href="/public/html/index.html" class="back-btn">
+						<img src="/public/images/therapy/back.png" alt="back" width="50" />
+					</a>
+
+					<div style="z-index:999;float:right">
+						<!-- <label for="code">Code :</label>  onkeyup="codeEntered(this)" -->
+						<input type="text" id="code" name="code" > 
+						<span style="background-color: gray;border:1px solid gray;margin:5px; padding:8px 10px 8px 10px;" onclick="codeEntered()">&nbsp;</span>
+					</div>
+				</div>
+
+				<div>
+					<div style="display:none">
+						<input class="form-check-input" type="checkbox" id="mouseTrackerSleep"
+							onchange="toggleTracker()" checked>
+						<label class="form-check-label" for="mouseTrackerSleep"> Enable Screen Values </label>
+					</div>
+					<div style="padding:20px;display:block" >
+						<!-- <input type="text" id="patId" value="TB8NCU" style="width:100%; margin-bottom:15px" />  -->
+						<div id="mydatadiv" style="display:none">
+							<select class="form-select" aria-label="Default select example" id="patIdList">
+							</select>
+
+							<br />
+							<button type="button" onclick="plotBtn()" style="width:100%"> Plot</button>
+						</div>
+
+						<div id="chart"></div>
+
+						<div id="generalNotesDiv" style="padding: 6px; border: 2px green solid;	margin: 4px;"></div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div style="display: flex;  align-items: center;justify-content: center;">
+			<div style="color:blue; position:absolute; display:none" id="recording_time_text"> Recording Time (Hours)
+			</div>
+			<div class="backward-forward back-chart" style="top: 485px;" onclick="goBack()"></div>
+			<div class="backward-forward forward-chart" style="top: 485px;" onclick="goForward()"></div>
+			<div class="axis-seperator" style="border-bottom:1px solid gray;top: 485px; position:absolute;width: 100%;"> &nbsp;</div>
+
+			<select class="form-select axislistClass" aria-label="Default select example" id="axislist0"
+				style="top: 735px;" onchange="chooseAxis(this)">
+				<option selected>Open this select menu</option>
+				<option value="1">One</option>
+				<option value="2">Two</option>
+				<option value="3">Three</option>
+			</select>
+
+			<span class="xmin" style="top: 708px">-</span> <span class="xmax" style="top: 708px">-</span>
+			<div class="backward-forward back-chart" style="top: 735px;" onclick="goBack()"></div>
+			<div class="backward-forward forward-chart" style="top: 735px;" onclick="goForward()"></div>
+			<div class="axis-seperator" style="border-bottom:1px solid gray;top: 735px; position:absolute;width: 100%;"> &nbsp;</div>
+
+			<select class="form-select axislistClass" aria-label="Default select example" id="axislist1"
+				style="top: 960px;" onchange="chooseAxis(this)">
+				<option selected>Open this select menu</option>
+				<option value="1">One</option>
+				<option value="2">Two</option>
+				<option value="3">Three</option>
+			</select>
+
+			<span class="xmin" style="top: 940px">-</span> <span class="xmax" style="top: 940px">-</span>
+			<div class="backward-forward back-chart" style="top: 960px;" onclick="goBack()"></div>
+			<div class="backward-forward forward-chart" style="top: 960px;" onclick="goForward()"></div>
+			<div class="axis-seperator" style="border-bottom:1px solid gray;top: 960px; position:absolute;width: 100%;"> &nbsp;</div>
+
+			<select class="form-select axislistClass" aria-label="Default select example" id="axislist2"
+				style="top: 1190px;" onchange="chooseAxis(this)">
+				<option selected>Open this select menu</option>
+				<option value="1">One</option>
+				<option value="2">Two</option>
+				<option value="3">Three</option>
+			</select>
+
+			<span class="xmin" style="top: 1170px">-</span> <span class="xmax" style="top: 1170px">-</span>
+			<div class="backward-forward back-chart" style="top: 1190px;" onclick="goBack()"></div>
+			<div class="backward-forward forward-chart" style="top: 1190px;" onclick="goForward()"></div>
+			<div class="axis-seperator" style="border-bottom:1px solid gray;top: 1190px; position:absolute;width: 100%;"> &nbsp;</div>
+
+			<select class="form-select axislistClass" aria-label="Default select example" id="axislist3"
+				style="top: 1430px;" onchange="chooseAxis(this)">
+				<option selected>Open this select menu</option>
+				<option value="1">One</option>
+				<option value="2">Two</option>
+				<option value="3">Three</option>
+			</select>
+
+			<span class="xmin" style="top: 1402px">-</span> <span class="xmax" style="top: 1402px">-</span>
+			<div class="backward-forward back-chart" style="top: 1430px;" onclick="goBack()"></div>
+			<div class="backward-forward forward-chart" style="top: 1430px;" onclick="goForward()"></div>
+			<div class="axis-seperator" style="border-bottom:1px solid gray;top: 1430px; position:absolute;width: 100%;"> &nbsp;</div>
+		</div>
+	</div>
+
+
+	<button type="button" id="infoBtn" class="btn btn-primary" data-toggle="modal" data-target="#infoModel"
+	style="display:none">
+	Info
+    </button>
+
+	<div class="modal fade" id="infoModel" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header" style="background-color:lightgreen">
+					<h5 class="modal-title" id="infoModalLabel" style="text-align: center;font-weight: bold;">
+						Parameter Definition</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+
+				<div style="  text-align: justify;	text-justify: inter-word;color:black;     font-size: 15px;    padding: 10px;">
+					<div>
+						<strong>sAHI (SleepImage's Apnea Hypopnea Index equivalent) </strong> This is an automated measure of the frequency of Apnea and Hypopnea events per hour of sleep using a set of rules that include reduction of oxygen levels. The sAHI_3% uses as part of it detection of breathing events, a reduction of the oxygen by 3%. The sAHI_4% is a less sensitive measure and requires a 4% drop in the oxygen level. These are similar but not exactly the same, as the AHI used to report a patients breathing in the sleep lab. 
+					</div>
+
+					<hr/>
+					<div>
+						<strong>Sleep Efficiency</strong> is the ratio of Total Sleep Time divided by Total Time in Bed. The ideal is > 85%.
+					</div>
+					<hr/>
+					<div>
+						<strong>TST_HOUR</strong> is the total sleep time in hours.
+					</div>
+					<hr/>
+					<div>
+						<strong>SpO2_Below90_Percent</strong> is the percentage of total sleep time where oxygen saturation drops below 90% during the sleep period.
+					</div>
+					<hr/>
+					<div>
+						<strong>SpO2_Below90_Duration_Min</strong> is the duration of total sleep time in Minutes where oxygen saturation drops below 90% during the sleep period.
+					</div>
+					
+
+					
+
+
+				</div>
+
+				<div class="modal-footer">
+					<!-- <button type="button" class="btn btn-secondary" ><a href="/public/html/settings.html"> OK</a></button> -->
+					<!-- <button type="button" class="btn btn-secondary" data-dismiss="modal"><a href="/public/html/settings.html"> OK</a></button> -->
+					<!-- <a href="https://csmaapp.azurewebsites.net/" target="_blank" rel="noopener"><button type="button" class="btn btn-primary" onclick='document.getElementById("closeAppUpdate").click()'>Update new app</button></a>  -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<button type="button" id="helpBtn" class="btn btn-primary" data-toggle="modal" data-target="#helpModel"
+	style="display:none">
+	Help
+    </button>
+
+	<div class="modal fade" id="helpModel" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header" style="background-color:lightgreen">
+					<h5 class="modal-title" id="helpModalLabel" style="text-align: center;font-weight: bold;">
+						Help</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+
+				<div style="  text-align: justify;	text-justify: inter-word;color:black;     font-size: 15px;    padding: 10px;">
+					If you have any questions or need assistance with the tracker application, please send an email to Support@Resttech.pro. Please do not reach out to the clinical staff for technical support.					
+
+
+				</div>
+
+				<div class="modal-footer" style="    justify-content: center; display:flex">
+					<button type="button" class="btn btn-primary" >
+						<a style="color:white; font-weight: bold;" href="mailto:Support@resttech.pro?subject=Email from RestTracker APP">Email Support</a></button> 
+					<!-- <button type="button" class="btn btn-secondary" data-dismiss="modal"><a href="/public/html/settings.html"> OK</a></button> -->
+					<!-- <a href="https://csmaapp.azurewebsites.net/" target="_blank" rel="noopener"><button type="button" class="btn btn-primary" onclick='document.getElementById("closeAppUpdate").click()'>Update new app</button></a>  -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>
