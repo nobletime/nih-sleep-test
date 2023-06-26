@@ -23,7 +23,7 @@ $(() => {
             json = dsa_json
             break;
         case "med":
-            json = med_json
+            json = isi
             break;
         case "general":
             json = general_json
@@ -35,7 +35,7 @@ $(() => {
             json = pap_json
             break;
         case "appliance":
-            json = appliance_json
+            json = epworth
             break;
         case "event":
             json = event_json

@@ -365,6 +365,469 @@ const event_json = {
     "completeText": "Submit"
    }
 
+
+const isi = {
+    "title": "ISI, Insomnia Severity Index",
+    "logoPosition": "right",
+    "completedHtml": "<h3>Your ISI submitted</h3>",
+    "completedBeforeHtml": "<h3>Our records show that you have already completed ISI.</h3>",
+    "pages": [
+     {
+      "name": "page1",
+      "elements": [
+       {
+        "type": "radiogroup",
+        "name": "q1",
+        "title": "1. Difficulties falling asleep",
+        "hideNumber": true,
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "no problem"
+         },
+         {
+          "value": "1",
+          "text": "mild"
+         },
+         {
+          "value": "2",
+          "text": "moderate"
+         },
+         {
+          "value": "3",
+          "text": "severe"
+         },
+         {
+          "value": "4",
+          "text": "very severe"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "q2",
+        "title": "2. Difficulties staying asleep",
+        "hideNumber": true,
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "no problem"
+         },
+         {
+          "value": "1",
+          "text": "mild"
+         },
+         {
+          "value": "2",
+          "text": "moderate"
+         },
+         {
+          "value": "3",
+          "text": "severe"
+         },
+         {
+          "value": "4",
+          "text": "very severe"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "q3",
+        "title": "3. Early morning awakenings",
+        "hideNumber": true,
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "no problem"
+         },
+         {
+          "value": "1",
+          "text": "mild"
+         },
+         {
+          "value": "2",
+          "text": "moderate"
+         },
+         {
+          "value": "3",
+          "text": "severe"
+         },
+         {
+          "value": "4",
+          "text": "very severe"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "q4",
+        "title": "4. Sleep dissatisfaction",
+        "hideNumber": true,
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "very satisfied"
+         },
+         {
+          "value": "1",
+          "text": "satisfied"
+         },
+         {
+          "value": "2",
+          "text": "neutral"
+         },
+         {
+          "value": "3",
+          "text": "dissatisfied"
+         },
+         {
+          "value": "4",
+          "text": "very dissatisfied"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "q5",
+        "title": "5. Interference of sleep problems with daytime functioning",
+        "hideNumber": true,
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "very satisfied"
+         },
+         {
+          "value": "1",
+          "text": "mild"
+         },
+         {
+          "value": "2",
+          "text": "moderate"
+         },
+         {
+          "value": "3",
+          "text": "severe"
+         },
+         {
+          "value": "4",
+          "text": "very severe"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "q6",
+        "title": "6. Interference of sleep problems with daytime functioning",
+        "hideNumber": true,
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "no problem"
+         },
+         {
+          "value": "1",
+          "text": "mild"
+         },
+         {
+          "value": "2",
+          "text": "moderate"
+         },
+         {
+          "value": "3",
+          "text": "severe"
+         },
+         {
+          "value": "4",
+          "text": "very severe"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "q7",
+        "title": "7. Preoccupation and distress caused by sleep difficulties",
+        "hideNumber": true,
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "no problem"
+         },
+         {
+          "value": "1",
+          "text": "mild"
+         },
+         {
+          "value": "2",
+          "text": "moderate"
+         },
+         {
+          "value": "3",
+          "text": "severe"
+         },
+         {
+          "value": "4",
+          "text": "very severe"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "name": "page2",
+      "elements": [
+       {
+        "type": "text",
+        "name": "total_isi",
+        "title": "Total is the ISI, Insomnia Severity Index",
+        "defaultValueExpression": "{q1}+{q2}+{q3}+{q4}+{q5}+{q6}+{q7}"
+       }
+      ]
+     }
+    ],
+    "navigateToUrlOnCondition": [
+     {}
+    ],
+    "completeText": "Submit"
+   }
+
+const epworth = {
+    "title": "Epworth Sleepiness Scale",
+    "logoPosition": "right",
+    "completedHtml": "<h3>Your Epworth Sleepiness Scale is submitted</h3>",
+    "completedBeforeHtml": "<h3>Our records show that you have already completed DSA.</h3>",
+    "pages": [
+     {
+      "name": "page1",
+      "elements": [
+       {
+        "type": "radiogroup",
+        "name": "q1",
+        "title": "Sitting and reading",
+        "hideNumber": true,
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "Would never nod off"
+         },
+         {
+          "value": "1",
+          "text": "Slight chance of nodding off"
+         },
+         {
+          "value": "2",
+          "text": "Moderate chance of nodding off"
+         },
+         {
+          "value": "3",
+          "text": "High chance of nodding off"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "q2",
+        "title": "Watching TV",
+        "hideNumber": true,
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "Would never nod off"
+         },
+         {
+          "value": "1",
+          "text": "Slight chance of nodding off"
+         },
+         {
+          "value": "2",
+          "text": "Moderate chance of nodding off"
+         },
+         {
+          "value": "3",
+          "text": "High chance of nodding off"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "q3",
+        "title": "Sitting, inactive, in a public place(e.g., in a meeting, theater, or dinner event)",
+        "hideNumber": true,
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "Would never nod off"
+         },
+         {
+          "value": "1",
+          "text": "Slight chance of nodding off"
+         },
+         {
+          "value": "2",
+          "text": "Moderate chance of nodding off"
+         },
+         {
+          "value": "3",
+          "text": "High chance of nodding off"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "q4",
+        "title": "As a passenger in a car for an hour or more without stopping for a break",
+        "hideNumber": true,
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "Would never nod off"
+         },
+         {
+          "value": "1",
+          "text": "Slight chance of nodding off"
+         },
+         {
+          "value": "2",
+          "text": "Moderate chance of nodding off"
+         },
+         {
+          "value": "3",
+          "text": "High chance of nodding off"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "q5",
+        "title": "Lying down to rest when circumstances permit",
+        "hideNumber": true,
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "Would never nod off"
+         },
+         {
+          "value": "1",
+          "text": "Slight chance of nodding off"
+         },
+         {
+          "value": "2",
+          "text": "Moderate chance of nodding off"
+         },
+         {
+          "value": "3",
+          "text": "High chance of nodding off"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "q6",
+        "title": "Sitting and talking to someone",
+        "hideNumber": true,
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "Would never nod off"
+         },
+         {
+          "value": "1",
+          "text": "Slight chance of nodding off"
+         },
+         {
+          "value": "2",
+          "text": "Moderate chance of nodding off"
+         },
+         {
+          "value": "3",
+          "text": "High chance of nodding off"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "question6",
+        "title": "Sitting quietly after a meal without alcohol",
+        "hideNumber": true,
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "Would never nod off"
+         },
+         {
+          "value": "1",
+          "text": "Slight chance of nodding off"
+         },
+         {
+          "value": "2",
+          "text": "Moderate chance of nodding off"
+         },
+         {
+          "value": "3",
+          "text": "High chance of nodding off"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "q7",
+        "title": "In a car, while stopped for a few minutes in traffic or at a light",
+        "hideNumber": true,
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "Would never nod off"
+         },
+         {
+          "value": "1",
+          "text": "Slight chance of nodding off"
+         },
+         {
+          "value": "2",
+          "text": "Moderate chance of nodding off"
+         },
+         {
+          "value": "3",
+          "text": "High chance of nodding off"
+         }
+        ]
+       }
+      ],
+      "description": "How likely are you to nod off or fall asleep in the following situations, in contrast to feeling just tired? This refers to your usual way of life in recent times. Even if you haven’t done some of these things recently, try to work out how they would have affected you. It is important that you answer each question as best you can. Use the following scale to choose the most appropriate number for each situation."
+     },
+     {
+      "name": "page2",
+      "elements": [
+       {
+        "type": "text",
+        "name": "total_score",
+        "title": "A score of 10 or greater raises concern: you may need to get more sleep, improve your sleep practices, or seek medical attention to determine why you are sleepy.",
+        "defaultValueExpression": "{q1}+{q2}+{q3}+{q4}+{q5}+{q6}+{q7}"
+       }
+      ]
+     }
+    ],
+    "navigateToUrlOnCondition": [
+     {}
+    ],
+    "completeText": "Submit"
+   }
+
 function getResultLink() {
     //document.getElementById("result_link").href=`/result?cid=${document.getElementById("cid").value}&pid=${document.getElementById("pid").value}`; 
 
