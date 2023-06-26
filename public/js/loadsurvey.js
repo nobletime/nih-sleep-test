@@ -29,7 +29,7 @@ $(() => {
             json = general_json
             break;
         case "inspire":
-            json = inspire_json
+            json = pitsburgh_json
             break;
         case "pap":
             json = pap_json

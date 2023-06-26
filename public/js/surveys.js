@@ -175,64 +175,290 @@ const general_json = {
     "completeText": "Submit"
 }
 
-const inspire_json = {
+const pitsburgh_json = {
+    "title": "PITTSBURGH SLEEP QUALITY INDEX",
     "logoPosition": "right",
-    "completedHtml": "<h3>Submitted! </h3>",
+    "completedHtml": "<h3>Your Daily Sleep Assessment is successfully submitted</h3>",
+    "completedBeforeHtml": "<h3>Our records show that you have already completed DSA.</h3>",
     "pages": [
-        {
-            "name": "page1",
-            "elements": [
-                {
-                    "type": "radiogroup",
-                    "name": "whichnight",
-                    "startWithNewLine": false,
-                    "title": "Regarding: ",
-                    "hideNumber": true,
-                    "isRequired": true,
-                    "choices": [
-                        {
-                            "value": "last_night",
-                            "text": "Last night"
-                        },
-                        {
-                            "value": "tonight",
-                            "text": "Tonight"
-                        }
-                    ],
-                    "colCount": 2
-                },
-                {
-                    "type": "dropdown",
-                    "name": "inspire_level",
-                    "title": "Select inspire changes:",
-                    "hideNumber": true,
-                    "isRequired": true,
-                    "choices": [
-                        {
-                            "value": "0",
-                            "text": "0 / off / stopped"
-                        },
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11"
-                    ]
-                }
-            ]
-        }
+     {
+      "name": "page1",
+      "elements": [
+       {
+        "type": "text",
+        "name": "question1",
+        "title": "During the past month, what time have you usually gone to bed at night? BED TIME",
+        "isRequired": true
+       },
+       {
+        "type": "text",
+        "name": "question2",
+        "startWithNewLine": false,
+        "title": "During the past month, how long (in minutes) has it usually taken you to fall asleep each night? NUMBER OF MINUTES",
+        "isRequired": true
+       },
+       {
+        "type": "text",
+        "name": "question3",
+        "title": "During the past month, what time have you usually gotten up in the morning? GETTING UP TIME",
+        "isRequired": true
+       },
+       {
+        "type": "text",
+        "name": "question4",
+        "startWithNewLine": false,
+        "title": "During the past month, how many hours of actual sleep did you get at night? (This may be different than the number of hours you spent in bed.) HOURS OF SLEEP PER NIGHT",
+        "isRequired": true
+       }
+      ],
+      "description": "INSTRUCTIONS: The following questions relate to your usual sleep habits during the past month only. Your answers should indicate the most accurate reply for the majority of days and nights in the past month. Please answer all questions."
+     },
+     {
+      "name": "page2",
+      "elements": [
+       {
+        "type": "matrix",
+        "name": "question21",
+        "title": "During the past month, how often have you had trouble sleeping because you",
+        "isRequired": true,
+        "columns": [
+         {
+          "value": "Column 1",
+          "text": "Not during the past month"
+         },
+         {
+          "value": "Column 2",
+          "text": "Less than once a week"
+         },
+         {
+          "value": "Column 3",
+          "text": "Once or twice a week"
+         },
+         {
+          "value": "Column 4",
+          "text": "Three or more times a week"
+         }
+        ],
+        "rows": [
+         {
+          "value": "Row 1",
+          "text": "Cannot get to sleep within 30 minutes"
+         },
+         {
+          "value": "Row 2",
+          "text": "Wake up in the middle of the night or early morning"
+         },
+         {
+          "value": "Row 3",
+          "text": "Have to get up to use the bathroom"
+         },
+         {
+          "value": "Row 4",
+          "text": "Cannot breathe comfortably"
+         },
+         {
+          "value": "Row 5",
+          "text": "Cough or snore loudly"
+         },
+         {
+          "value": "Row 6",
+          "text": "Feel too cold"
+         },
+         {
+          "value": "Row 7",
+          "text": "Feel too hot"
+         },
+         {
+          "value": "Row 8",
+          "text": "Had bad dreams"
+         },
+         {
+          "value": "Row 9",
+          "text": "Have pain"
+         },
+         {
+          "value": "Row 10",
+          "text": "Other reason(s)"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "question16",
+        "title": "During the past month, how much of a problem has it been for you to keep up enoughenthusiasm to get things done?",
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "Item 1",
+          "text": "No problem at all"
+         },
+         {
+          "value": "Item 2",
+          "text": "Only a very slight problem"
+         },
+         {
+          "value": "Item 3",
+          "text": "Somewhat of a problem"
+         },
+         {
+          "value": "Item 4",
+          "text": "A very big problem"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "question17",
+        "title": "During the past month, how often have you taken medicine to help you sleep (prescribed or \"over the counter\")?",
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "Item 2",
+          "text": "Not during the past month"
+         },
+         {
+          "value": "Item 3",
+          "text": "Less than once a week"
+         },
+         {
+          "value": "Item 4",
+          "text": "Once or twice a week"
+         },
+         {
+          "value": "Item 5",
+          "text": "Three or more times a week"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "question18",
+        "startWithNewLine": false,
+        "title": "During the past month, how often have you had trouble staying awake while driving, eatingmeals, or engaging in social activity?",
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "Item 2",
+          "text": "Not during the past month"
+         },
+         {
+          "value": "Item 3",
+          "text": "Less than once a week"
+         },
+         {
+          "value": "Item 4",
+          "text": "Once or twice a week"
+         },
+         {
+          "value": "Item 5",
+          "text": "Three or more times a week"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "question19",
+        "title": "During the past month, how much of a problem has it been for you to keep up enoughenthusiasm to get things done?",
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "Item 1",
+          "text": "No problem at all"
+         },
+         {
+          "value": "Item 2",
+          "text": "Only a very slight problem"
+         },
+         {
+          "value": "Item 3",
+          "text": "Somewhat of a problem"
+         },
+         {
+          "value": "Item 4",
+          "text": "A very big problem"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "question20",
+        "startWithNewLine": false,
+        "title": "Do you have a bed partner or room mate?",
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "Item 1",
+          "text": "No bed partner or room mate"
+         },
+         {
+          "value": "Item 2",
+          "text": "Partner/room mate in other room"
+         },
+         {
+          "value": "Item 3",
+          "text": "Partner in same room, but not same bed"
+         },
+         {
+          "value": "Item 4",
+          "text": "Partner in same bed"
+         }
+        ]
+       },
+       {
+        "type": "matrix",
+        "name": "question22",
+        "title": "If you have a room mate or bed partner, ask him/her how often in the past month you have had",
+        "isRequired": true,
+        "columns": [
+         {
+          "value": "Column 1",
+          "text": "Not during the past month"
+         },
+         {
+          "value": "Column 2",
+          "text": "Less than once a week"
+         },
+         {
+          "value": "Column 3",
+          "text": "Once or twice a week"
+         },
+         {
+          "value": "Column 4",
+          "text": "Three or more times a week"
+         }
+        ],
+        "rows": [
+         {
+          "value": "Row 1",
+          "text": "Loud snoring"
+         },
+         {
+          "value": "Row 2",
+          "text": "Long pauses between breaths while asleep"
+         },
+         {
+          "value": "Row 3",
+          "text": "Legs twitching or jerking while you sleep"
+         },
+         {
+          "value": "Row 4",
+          "text": "Episodes of disorientation or confusion during sleep"
+         },
+         {
+          "value": "Row 5",
+          "text": "Other restlessness while you sleep"
+         }
+        ]
+       }
+      ],
+      "description": "For each of the remaining questions, check the one best response. Please answer all questions. During the past month, how often have you had trouble sleeping because you ."
+     }
     ],
     "navigateToUrlOnCondition": [
-        {}
+     {}
     ],
     "completeText": "Submit"
-}
+   }
 
 const appliance_json = {
     "logoPosition": "right",
