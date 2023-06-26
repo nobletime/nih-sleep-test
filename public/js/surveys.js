@@ -502,48 +502,144 @@ const appliance_json = {
     "completeText": "Submit"
 }
 
-const pap_json = {
+const general_sleep_related_json = {
+    "title": "General Sleep Related Questions",
     "logoPosition": "right",
-    "completedHtml": "<h3>Submitted! </h3>",
+    "completedHtml": "<h3>Assessment is successfully submitted</h3>",
+    "completedBeforeHtml": "<h3>Our records show that you have already completed DSA.</h3>",
     "pages": [
-        {
-            "name": "page1",
-            "elements": [
-                {
-                    "type": "radiogroup",
-                    "name": "whichnight",
-                    "startWithNewLine": false,
-                    "title": "Regarding: ",
-                    "hideNumber": true,
-                    "isRequired": true,
-                    "choices": [
-                     {
-                      "value": "last_night",
-                      "text": "Last night"
-                     },
-                     {
-                      "value": "tonight",
-                      "text": "Tonight"
-                     }
-                    ],
-                    "colCount": 2
-                   },
-                {
-                    "type": "comment",
-                    "name": "comment",
-                    "title": "Type in the change to your PAP treatmen: ",
-                    "hideNumber": true,
-                    "isRequired": true
-                }
-            ]
-        }
+     {
+      "name": "page2",
+      "elements": [
+       {
+        "type": "radiogroup",
+        "name": "question16",
+        "title": "Have you been observed to snore?",
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "Item 1",
+          "text": "No"
+         },
+         {
+          "value": "Item 2",
+          "text": "Mild"
+         },
+         {
+          "value": "Item 3",
+          "text": "Moderate"
+         },
+         {
+          "value": "Item 4",
+          "text": "Severe"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "question1",
+        "title": "Have you been witnessed to have pauses in breathing during sleep?",
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "Item 1",
+          "text": "No"
+         },
+         {
+          "value": "Item 2",
+          "text": "Mild"
+         },
+         {
+          "value": "Item 3",
+          "text": "Moderate"
+         },
+         {
+          "value": "Item 4",
+          "text": "Severe"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "question2",
+        "title": "Do you awaken gasping for air?",
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "Item 1",
+          "text": "No"
+         },
+         {
+          "value": "Item 2",
+          "text": "Rarely"
+         },
+         {
+          "value": "Item 3",
+          "text": "Moderate"
+         },
+         {
+          "value": "Item 4",
+          "text": "Frequently"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "question3",
+        "title": "Have you had to increase the head of your bed?",
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "Item 1",
+          "text": "No"
+         },
+         {
+          "value": "Item 2",
+          "text": "Slightly"
+         },
+         {
+          "value": "Item 3",
+          "text": "Moderately"
+         },
+         {
+          "value": "Item 4",
+          "text": "Extensively (90 degrees)"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "question4",
+        "title": "Have you developed shortness of breathing during sleep?",
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "Item 1",
+          "text": "No"
+         },
+         {
+          "value": "Item 2",
+          "text": "Rarely"
+         },
+         {
+          "value": "Item 3",
+          "text": "Moderately"
+         },
+         {
+          "value": "Item 4",
+          "text": "Frequently"
+         }
+        ]
+       }
+      ],
+      "description": "For each of the remaining questions, check the one best response. Please answer all questions. During the past month, how often have you had trouble sleeping because you ."
+     }
     ],
- //   "navigateToUrl": "/",
     "navigateToUrlOnCondition": [
-        {}
+     {}
     ],
     "completeText": "Submit"
-}
+   }
 
 const event_json = {
     "logoPosition": "right",

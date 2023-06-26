@@ -32,7 +32,7 @@ $(() => {
             json = pitsburgh_json
             break;
         case "pap":
-            json = pap_json
+            json = general_sleep_related_json
             break;
         case "appliance":
             json = epworth
