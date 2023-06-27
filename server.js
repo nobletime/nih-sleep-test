@@ -53,7 +53,7 @@ passport.use(new LocalStrategy({
 },
   async (req, username, password, done) => {
     const user = req.body.username.trim();    
-    const rows = await mysql.customQuery(`select * from patient_list where email = '${username}' `)
+    const rows = await mysql.customQuery(`select * from patient_list where email = '${username}' and clinic_id=2`)
     
     if (rows.length == 0)
       return done(null, false, req.flash('message', 'Email does not exist'))
