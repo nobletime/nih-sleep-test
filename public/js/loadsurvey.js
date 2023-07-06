@@ -19,22 +19,19 @@ $(() => {
     let json = {};
 
     switch (document.querySelector(".surveyElement").id) {
-        case "dsa":
-            json = dsa_json
-            break;
-        case "med":
+        case "isi":
             json = isi
             break;
         case "general":
             json = general_json
             break;
-        case "inspire":
+        case "pitsburgh":
             json = pitsburgh_json
             break;
-        case "pap":
+        case "general_sleep_related":
             json = general_sleep_related_json
             break;
-        case "appliance":
+        case "epworth":
             json = epworth
             break;
         case "event":
@@ -42,7 +39,6 @@ $(() => {
             break;
         default:
     }
-
 
     window.survey = new Survey.Model(json);
     (new Date().getHours() < 14 || document.querySelector(".surveyElement").id == "dsa") ?
@@ -74,7 +70,6 @@ $(() => {
                 type: document.querySelector(".surveyElement").id,
                 data: sender.data
             }
-
 
             //   surveydata.clinic_name = cname
             //    surveydata.date = new Date(moment(new Date()).format('MM/DD/YYYY'));

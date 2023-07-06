@@ -191,11 +191,28 @@ const pitsburgh_json = {
         "isRequired": true
        },
        {
-        "type": "text",
+        "type": "dropdown",
         "name": "question2",
         "startWithNewLine": false,
         "title": "During the past month, how long (in minutes) has it usually taken you to fall asleep each night? NUMBER OF MINUTES",
-        "isRequired": true
+        "choices": [
+         {
+          "value": "0",
+          "text": "< 15 minutes"
+         },
+         {
+          "value": "1",
+          "text": "16-30 minutes"
+         },
+         {
+          "value": "2",
+          "text": "31-60 minutes"
+         },
+         {
+          "value": "3",
+          "text": "> 60 minutes"
+         }
+        ]
        },
        {
         "type": "text",
@@ -204,11 +221,28 @@ const pitsburgh_json = {
         "isRequired": true
        },
        {
-        "type": "text",
-        "name": "question4",
+        "type": "dropdown",
+        "name": "question6",
         "startWithNewLine": false,
         "title": "During the past month, how many hours of actual sleep did you get at night? (This may be different than the number of hours you spent in bed.) HOURS OF SLEEP PER NIGHT",
-        "isRequired": true
+        "choices": [
+         {
+          "value": "0",
+          "text": "> 7 hours"
+         },
+         {
+          "value": "1",
+          "text": "6 - 7 hours"
+         },
+         {
+          "value": "2",
+          "text": "5 - 6 hours"
+         },
+         {
+          "value": "3",
+          "text": "< 5 hours"
+         }
+        ]
        }
       ],
       "description": "INSTRUCTIONS: The following questions relate to your usual sleep habits during the past month only. Your answers should indicate the most accurate reply for the majority of days and nights in the past month. Please answer all questions."
@@ -223,19 +257,19 @@ const pitsburgh_json = {
         "isRequired": true,
         "columns": [
          {
-          "value": "Column 1",
+          "value": "0",
           "text": "Not during the past month"
          },
          {
-          "value": "Column 2",
+          "value": "1",
           "text": "Less than once a week"
          },
          {
-          "value": "Column 3",
+          "value": "2",
           "text": "Once or twice a week"
          },
          {
-          "value": "Column 4",
+          "value": "3",
           "text": "Three or more times a week"
          }
         ],
@@ -279,30 +313,6 @@ const pitsburgh_json = {
          {
           "value": "Row 10",
           "text": "Other reason(s)"
-         }
-        ]
-       },
-       {
-        "type": "radiogroup",
-        "name": "question16",
-        "title": "During the past month, how much of a problem has it been for you to keep up enoughenthusiasm to get things done?",
-        "isRequired": true,
-        "choices": [
-         {
-          "value": "Item 1",
-          "text": "No problem at all"
-         },
-         {
-          "value": "Item 2",
-          "text": "Only a very slight problem"
-         },
-         {
-          "value": "Item 3",
-          "text": "Somewhat of a problem"
-         },
-         {
-          "value": "Item 4",
-          "text": "A very big problem"
          }
         ]
        },
@@ -357,8 +367,8 @@ const pitsburgh_json = {
        },
        {
         "type": "radiogroup",
-        "name": "question19",
-        "title": "During the past month, how much of a problem has it been for you to keep up enoughenthusiasm to get things done?",
+        "name": "question16",
+        "title": "During the past month, how much of a problem has it been for you to keep up enough enthusiasm to get things done?",
         "isRequired": true,
         "choices": [
          {
@@ -375,6 +385,55 @@ const pitsburgh_json = {
          },
          {
           "value": "Item 4",
+          "text": "A very big problem"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "question5",
+        "startWithNewLine": false,
+        "title": "During the past month, how would you rate your sleep quality overall?",
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "Very good"
+         },
+         {
+          "value": "1",
+          "text": "Fairly good"
+         },
+         {
+          "value": "2",
+          "text": "Fairly bad"
+         },
+         {
+          "value": "3",
+          "text": "Very bad"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "question19",
+        "title": "During the past month, how much of a problem has it been for you to keep up enoughenthusiasm to get things done?",
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "No problem at all"
+         },
+         {
+          "value": "1",
+          "text": "Only a very slight problem"
+         },
+         {
+          "value": "2",
+          "text": "Somewhat of a problem"
+         },
+         {
+          "value": "3",
           "text": "A very big problem"
          }
         ]
@@ -411,19 +470,19 @@ const pitsburgh_json = {
         "isRequired": true,
         "columns": [
          {
-          "value": "Column 1",
+          "value": "0",
           "text": "Not during the past month"
          },
          {
-          "value": "Column 2",
+          "value": "1",
           "text": "Less than once a week"
          },
          {
-          "value": "Column 3",
+          "value": "2",
           "text": "Once or twice a week"
          },
          {
-          "value": "Column 4",
+          "value": "3",
           "text": "Three or more times a week"
          }
         ],
@@ -506,130 +565,136 @@ const general_sleep_related_json = {
     "title": "General Sleep Related Questions",
     "logoPosition": "right",
     "completedHtml": "<h3>Assessment is successfully submitted</h3>",
-    "completedBeforeHtml": "<h3>Our records show that you have already completed DSA.</h3>",
+    "completedBeforeHtml": "<h3>Our records show that you have already this assessment.</h3>",
     "pages": [
      {
       "name": "page2",
       "elements": [
        {
         "type": "radiogroup",
-        "name": "question16",
+        "name": "q1",
         "title": "Have you been observed to snore?",
         "isRequired": true,
         "choices": [
          {
-          "value": "Item 1",
+          "value": "0",
           "text": "No"
          },
          {
-          "value": "Item 2",
+          "value": "1",
           "text": "Mild"
          },
          {
-          "value": "Item 3",
+          "value": "2",
           "text": "Moderate"
          },
          {
-          "value": "Item 4",
+          "value": "3",
           "text": "Severe"
          }
         ]
        },
        {
         "type": "radiogroup",
-        "name": "question1",
+        "name": "q2",
         "title": "Have you been witnessed to have pauses in breathing during sleep?",
         "isRequired": true,
         "choices": [
          {
-          "value": "Item 1",
+          "value": "0",
           "text": "No"
          },
          {
-          "value": "Item 2",
+          "value": "1",
           "text": "Mild"
          },
          {
-          "value": "Item 3",
+          "value": "2",
           "text": "Moderate"
          },
          {
-          "value": "Item 4",
+          "value": "3",
           "text": "Severe"
          }
         ]
        },
        {
         "type": "radiogroup",
-        "name": "question2",
+        "name": "q3",
         "title": "Do you awaken gasping for air?",
         "isRequired": true,
         "choices": [
          {
-          "value": "Item 1",
+          "value": "0",
           "text": "No"
          },
          {
-          "value": "Item 2",
+          "value": "1",
           "text": "Rarely"
          },
          {
-          "value": "Item 3",
+          "value": "2",
           "text": "Moderate"
          },
          {
-          "value": "Item 4",
+          "value": "3",
           "text": "Frequently"
          }
         ]
        },
        {
         "type": "radiogroup",
-        "name": "question3",
+        "name": "q4",
         "title": "Have you had to increase the head of your bed?",
         "isRequired": true,
         "choices": [
          {
-          "value": "Item 1",
+          "value": "0",
           "text": "No"
          },
          {
-          "value": "Item 2",
+          "value": "1",
           "text": "Slightly"
          },
          {
-          "value": "Item 3",
+          "value": "2",
           "text": "Moderately"
          },
          {
-          "value": "Item 4",
+          "value": "3",
           "text": "Extensively (90 degrees)"
          }
         ]
        },
        {
         "type": "radiogroup",
-        "name": "question4",
+        "name": "q5",
         "title": "Have you developed shortness of breathing during sleep?",
         "isRequired": true,
         "choices": [
          {
-          "value": "Item 1",
+          "value": "0",
           "text": "No"
          },
          {
-          "value": "Item 2",
+          "value": "1",
           "text": "Rarely"
          },
          {
-          "value": "Item 3",
+          "value": "2",
           "text": "Moderately"
          },
          {
-          "value": "Item 4",
+          "value": "3",
           "text": "Frequently"
          }
         ]
+       },
+       {
+        "type": "text",
+        "name": "general_sleep_related_score",
+        "title": "general sleep related score",
+        "defaultValueExpression": "{q1}+{q2}+{q3}+{q4}+{q5}"
        }
       ],
       "description": "For each of the remaining questions, check the one best response. Please answer all questions. During the past month, how often have you had trouble sleeping because you ."

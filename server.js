@@ -163,7 +163,6 @@ app.get('/getmanifest', (req, res) => {
   //return res.sendFile(path.join(__dirname, "public", "html", "index.html"))
 });
 
-
 app.post('/save-comment', async (req, res) => {
   const save = await mdb.save("patient_comment", req.body);
   res.send("saved")
