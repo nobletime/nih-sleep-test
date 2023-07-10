@@ -1146,7 +1146,7 @@ const epworth = {
        },
        {
         "type": "radiogroup",
-        "name": "question6",
+        "name": "q7",
         "title": "Sitting quietly after a meal without alcohol",
         "hideNumber": true,
         "isRequired": true,
@@ -1171,7 +1171,7 @@ const epworth = {
        },
        {
         "type": "radiogroup",
-        "name": "q7",
+        "name": "q8",
         "title": "In a car, while stopped for a few minutes in traffic or at a light",
         "hideNumber": true,
         "isRequired": true,
@@ -1204,7 +1204,7 @@ const epworth = {
         "type": "text",
         "name": "total_score",
         "title": "A score of 10 or greater raises concern: you may need to get more sleep, improve your sleep practices, or seek medical attention to determine why you are sleepy.",
-        "defaultValueExpression": "{q1}+{q2}+{q3}+{q4}+{q5}+{q6}+{q7}"
+        "defaultValueExpression": "{q1}+{q2}+{q3}+{q4}+{q5}+{q6}+{q7}+{q8}"
        }
       ]
      }
