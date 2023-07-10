@@ -645,7 +645,7 @@ const general_sleep_related_json = {
        {
         "type": "radiogroup",
         "name": "q4",
-        "title": "Have you had to increase the head of your bed?",
+        "title": "Have you had to raise the head of your bed?",
         "isRequired": true,
         "choices": [
          {
