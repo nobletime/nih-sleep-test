@@ -752,7 +752,6 @@ const event_json = {
     "completeText": "Submit"
    }
 
-
 const isi = {
     "title": "ISI, Insomnia Severity Index",
     "logoPosition": "right",
@@ -887,52 +886,52 @@ const isi = {
         "choices": [
          {
           "value": "0",
-          "text": "very satisfied"
+          "text": "not at all"
          },
          {
           "value": "1",
-          "text": "mild"
+          "text": "a little"
          },
          {
           "value": "2",
-          "text": "moderate"
+          "text": "somewhat"
          },
          {
           "value": "3",
-          "text": "severe"
+          "text": "much"
          },
          {
           "value": "4",
-          "text": "very severe"
+          "text": "very much"
          }
         ]
        },
        {
         "type": "radiogroup",
         "name": "q6",
-        "title": "6. Interference of sleep problems with daytime functioning",
+        "title": "6. Noticeability of sleep difficulties by others",
         "hideNumber": true,
         "isRequired": true,
         "choices": [
          {
           "value": "0",
-          "text": "no problem"
+          "text": "not at all"
          },
          {
           "value": "1",
-          "text": "mild"
+          "text": "a little"
          },
          {
           "value": "2",
-          "text": "moderate"
+          "text": "somewhat"
          },
          {
           "value": "3",
-          "text": "severe"
+          "text": "much"
          },
          {
           "value": "4",
-          "text": "very severe"
+          "text": "very much"
          }
         ]
        },
@@ -945,23 +944,23 @@ const isi = {
         "choices": [
          {
           "value": "0",
-          "text": "no problem"
+          "text": "not at all"
          },
          {
           "value": "1",
-          "text": "mild"
+          "text": "a little"
          },
          {
           "value": "2",
-          "text": "moderate"
+          "text": "somewhat"
          },
          {
           "value": "3",
-          "text": "severe"
+          "text": "much"
          },
          {
           "value": "4",
-          "text": "very severe"
+          "text": "very much"
          }
         ]
        }
