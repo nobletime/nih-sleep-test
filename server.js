@@ -164,7 +164,8 @@ app.get('/getmanifest', (req, res) => {
 });
 
 app.post('/save-comment', async (req, res) => {
-  const save = await mdb.save("patient_comment", req.body);
+  const save = (req.body.type == 'general')?
+       await mdb.save("patient_comment", req.body) : await mdb.save("patient_comment_nih", req.body);
   res.send("saved")
 
   // if (!found) {
@@ -188,7 +189,7 @@ app.get('/getversion', async (req, res) => {
 });
 
 app.get('/getCsvData', async (req, res) => {
-  const data = await mysql.selectAllWhere("sleep", `ring_id='${req.query.ring_id}' order by plot_date`)
+  const data = await mysql.selectAllWhere("sleep_nih_high_risk_ob", `ring_id='${req.query.ring_id}' order by plot_date`)
   res.send(data)
 })
 
@@ -210,14 +211,11 @@ app.post('/getCsmaApp', async (req, res) => {
   if (patId == "A1B2C3") {
     patId = "479WUG"
   }
-  //const foundOld = await mdb.findOne("patient_comment_archive", { "appId": { $regex: new RegExp("^" + patId.toLowerCase(), "i") } })
-  const foundOld = await mdb.findOne("patient_comment_archive", { "appId": patId })
-
   //let foundNew = await mdb.find("patient_comment", { "patient_app_id": { $regex: new RegExp("^" + req.body.patId.toLowerCase(), "i") } })
-  let foundNew = await mdb.find("patient_comment", { "patient_app_id": req.body.patId })
+  let foundNew = await mdb.find("patient_comment_nih", { "patient_app_id": req.body.patId })
 
   if (req.body.patId == "A1B2C3") {
-    foundNew = (await mdb.find("patient_comment", { "patient_app_id": { $regex: new RegExp("^" + "479WUG", "i") } })).concat(foundNew);
+    foundNew = (await mdb.find("patient_comment_nih", { "patient_app_id": { $regex: new RegExp("^" + "479WUG", "i") } })).concat(foundNew);
   }
 
   let convertedNew = []
@@ -252,10 +250,10 @@ app.post('/getCsmaApp', async (req, res) => {
     convertedNew.push(tmp)
   }
 
-  if (foundOld) {
-    convertedNew = JSON.parse(foundOld.comments).concat(convertedNew)
-    //return res.send(JSON.parse(foundOld.comments).concat(convertedNew))
-  }
+  // if (foundOld) {
+  //   convertedNew = JSON.parse(foundOld.comments).concat(convertedNew)
+  //   //return res.send(JSON.parse(foundOld.comments).concat(convertedNew))
+  // }
 
   const clinic_datapoint = await mdb.find("clinic_comment_datapoint", { "exPatId": req.body.patId });
   const clinic_data = await mdb.find("clinic_comment", { "exPatId": req.body.patId });
