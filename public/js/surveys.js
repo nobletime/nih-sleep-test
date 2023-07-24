@@ -582,22 +582,22 @@ const general_sleep_related_json = {
          },
          {
           "value": "1",
-          "text": "Mild"
+          "text": "Mild (not very disturbing to others)"
          },
          {
           "value": "2",
-          "text": "Moderate"
+          "text": "Moderate (sometimes disturbing to others)"
          },
          {
           "value": "3",
-          "text": "Severe"
+          "text": "Severe (always disturbing to others)"
          }
         ]
        },
        {
         "type": "radiogroup",
         "name": "q2",
-        "title": "Have you been witnessed to have pauses in breathing during sleep?",
+        "title": "Has anyone noticed that you briefly stop breathing while asleep?",
         "isRequired": true,
         "choices": [
          {
@@ -606,15 +606,15 @@ const general_sleep_related_json = {
          },
          {
           "value": "1",
-          "text": "Mild"
+          "text": "Occasionally"
          },
          {
           "value": "2",
-          "text": "Moderate"
+          "text": "Often"
          },
          {
           "value": "3",
-          "text": "Severe"
+          "text": "Every night"
          }
         ]
        },
@@ -630,15 +630,15 @@ const general_sleep_related_json = {
          },
          {
           "value": "1",
-          "text": "Rarely"
+          "text": "Occasionally"
          },
          {
           "value": "2",
-          "text": "Moderate"
+          "text": "Often"
          },
          {
           "value": "3",
-          "text": "Frequently"
+          "text": "Every night"
          }
         ]
        },
@@ -669,7 +669,7 @@ const general_sleep_related_json = {
        {
         "type": "radiogroup",
         "name": "q5",
-        "title": "Have you developed shortness of breathing during sleep?",
+        "title": "Do you develop shortness while sleeping or trying to sleep?",
         "isRequired": true,
         "choices": [
          {
@@ -678,15 +678,87 @@ const general_sleep_related_json = {
          },
          {
           "value": "1",
-          "text": "Rarely"
+          "text": "Occasionally"
          },
          {
           "value": "2",
-          "text": "Moderately"
+          "text": "Often"
          },
          {
           "value": "3",
-          "text": "Frequently"
+          "text": "Every night"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "q6",
+        "title": "Do you awaken with heartburn / reflux feelings?",
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "No"
+         },
+         {
+          "value": "1",
+          "text": "Occasionally"
+         },
+         {
+          "value": "2",
+          "text": "Often"
+         },
+         {
+          "value": "3",
+          "text": "Every night"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "q7",
+        "title": "Do you have restless sensation in your legs with an urge to move while in bed?",
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "No"
+         },
+         {
+          "value": "1",
+          "text": "Occasionally"
+         },
+         {
+          "value": "2",
+          "text": "Often"
+         },
+         {
+          "value": "3",
+          "text": "Every night"
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "q8",
+        "title": "Do you awaken because the baby is kicking?",
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "0",
+          "text": "No"
+         },
+         {
+          "value": "1",
+          "text": "Occasionally"
+         },
+         {
+          "value": "2",
+          "text": "Often"
+         },
+         {
+          "value": "3",
+          "text": "Every night"
          }
         ]
        },
@@ -694,10 +766,10 @@ const general_sleep_related_json = {
         "type": "text",
         "name": "general_sleep_related_score",
         "title": "general sleep related score",
-        "defaultValueExpression": "{q1}+{q2}+{q3}+{q4}+{q5}"
+        "defaultValueExpression": "{q1}+{q2}+{q3}+{q4}+{q5}+{q6}+{q7}+{q8}"
        }
       ],
-      "description": "For each of the remaining questions, check the one best response. Please answer all questions. During the past month, how often have you had trouble sleeping because you ."
+      "description": "For each of the remaining questions, check the one best response. Please answer all questions. During the past week, how often have you had trouble sleeping because you ."
      }
     ],
     "navigateToUrlOnCondition": [
@@ -721,19 +793,14 @@ const event_json = {
         "hideNumber": true,
         "isRequired": true,
         "choices": [
-         {
-          "value": "seizure",
-          "text": "Seizure"
-         },
-         {
-          "value": "headache",
-          "text": "Headache"
-         },
-         {
-          "value": "spell",
-          "text": "Spell"
-         }
+         "Baby kicking",
+         "Breathing problems",
+         "Nausea",
+         "Heartburnt",
+         "Headace",
+         "Restless legs"
         ],
+        "showOtherItem": true,
         "colCount": 2
        },
        {

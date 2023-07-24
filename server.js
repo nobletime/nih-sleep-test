@@ -164,7 +164,7 @@ app.get('/getmanifest', (req, res) => {
 });
 
 app.post('/save-comment', async (req, res) => {
-  const save = (req.body.type == 'general')?
+  const save = (req.body.type == 'general' || req.body.type == 'event' )?
        await mdb.save("patient_comment", req.body) : await mdb.save("patient_comment_nih", req.body);
   res.send("saved")
 
