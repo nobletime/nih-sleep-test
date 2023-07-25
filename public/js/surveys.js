@@ -1281,6 +1281,75 @@ const epworth = {
     "completeText": "Submit"
    }
 
+const onboarding_json = {
+    "logoPosition": "right",
+    "completedHtml": "<h3>successfully submitted</h3>",
+    "pages": [
+     {
+      "name": "page1",
+      "elements": [
+       {
+        "type": "text",
+        "name": "subject_number",
+        "title": "Subject number:",
+        "description": "(same as ring number)",
+        "isRequired": true
+       },
+       {
+        "type": "text",
+        "name": "question1",
+        "startWithNewLine": false,
+        "title": "Ring serial number",
+        "isRequired": true
+       },
+       {
+        "type": "text",
+        "name": "irritation_ring",
+        "title": "Irritation from the ring?",
+        "isRequired": true
+       },
+       {
+        "type": "text",
+        "name": "finger_used",
+        "startWithNewLine": false,
+        "title": "Which finger will be used?",
+        "isRequired": true
+       },
+       {
+        "type": "text",
+        "name": "weight",
+        "title": "Weight:",
+        "isRequired": true
+       },
+       {
+        "type": "text",
+        "name": "pulse",
+        "startWithNewLine": false,
+        "title": "Pulse:",
+        "isRequired": true
+       },
+       {
+        "type": "text",
+        "name": "blood_pressure",
+        "title": "Blood pressure:",
+        "isRequired": true
+       },
+       {
+        "type": "text",
+        "name": "neck_circumference",
+        "startWithNewLine": false,
+        "title": "Neck circumference?",
+        "isRequired": true
+       }
+      ]
+     }
+    ],
+    "navigateToUrlOnCondition": [
+     {}
+    ],
+    "completeText": "Submit"
+   }
+
 function getResultLink() {
     //document.getElementById("result_link").href=`/result?cid=${document.getElementById("cid").value}&pid=${document.getElementById("pid").value}`; 
 
