@@ -164,8 +164,17 @@ app.get('/getmanifest', (req, res) => {
 });
 
 app.post('/save-comment', async (req, res) => {
-  const save = (req.body.type == 'general' || req.body.type == 'event' )?
-       await mdb.save("patient_comment", req.body) : await mdb.save("patient_comment_nih", req.body);
+
+  if (req.body.type  == "onboarding") {
+    const date_created = moment(req.body.date).format('YYYY-MM-DD')
+    const query = `insert into nih_high_risk_ob_patient (subject_number, ring_serial_number, firstname, lastname, data, date_created) values ('${req.body.data.subject_number}', '${req.body.data.ring_serial_number}', '${req.body.data.firstname}', '${req.body.data.lastname}', '${JSON.stringify(req.body.data)}', '${date_created}')`;
+    const data = await mysql.customQuery(query)
+    
+  } else {
+    const save = (req.body.type == 'general' || req.body.type == 'event' )?
+    await mdb.save("patient_comment", req.body) : await mdb.save("patient_comment_nih", req.body);
+  }
+
   res.send("saved")
 
   // if (!found) {
@@ -175,7 +184,6 @@ app.post('/save-comment', async (req, res) => {
 
   //req.flash('message', "An email with link to reset your password was to the email on the account");
   //res.redirect('/signin');
-
 });
 
 // app.get('/chat', async (req, res) => {

@@ -72,9 +72,7 @@ $(() => {
                 plot_date: plot_date,
                 type: document.querySelector(".surveyElement").id,
                 data: sender.data
-            }
-
-            if (surveydata.type == "onboarding") return;
+            }        
 
             //   surveydata.clinic_name = cname
             //    surveydata.date = new Date(moment(new Date()).format('MM/DD/YYYY'));

@@ -1297,9 +1297,22 @@ const onboarding_json = {
        },
        {
         "type": "text",
-        "name": "question1",
+        "name": "ring_serial_number",
         "startWithNewLine": false,
         "title": "Ring serial number",
+        "isRequired": true
+       },
+       {
+        "type": "text",
+        "name": "firstname",
+        "title": "Firstname",
+        "isRequired": true
+       },
+       {
+        "type": "text",
+        "name": "lastname",
+        "startWithNewLine": false,
+        "title": "Lastname",
         "isRequired": true
        },
        {
