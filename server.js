@@ -53,10 +53,10 @@ passport.use(new LocalStrategy({
 },
   async (req, username, password, done) => {
     const user = req.body.username.trim();    
-    const rows = await mysql.customQuery(`select * from patient_list where email = '${username}' and clinic_id=2`)
+    const rows = await mysql.customQuery(`select * from patient_list where app_id = '${username}' and clinic_id=2`)
     
     if (rows.length == 0)
-      return done(null, false, req.flash('message', 'Email does not exist'))
+      return done(null, false, req.flash('message', 'App Id does not exist'))
 
       if (rows.length>1)
       return done(null, false, req.flash('message', `${username} is not unique. Contact support!`))
