@@ -1314,7 +1314,23 @@ const onboarding_json = {
         "startWithNewLine": false,
         "title": "Lastname",
         "isRequired": true
-       },
+       }
+      ]
+     }
+    ],
+    "navigateToUrlOnCondition": [
+     {}
+    ],
+    "completeText": "Submit"
+   }
+
+const onboarding_visit_json = {
+    "logoPosition": "right",
+    "completedHtml": "<h3>successfully submitted</h3>",
+    "pages": [
+     {
+      "name": "page1",
+      "elements": [
        {
         "type": "text",
         "name": "irritation_ring",
@@ -1362,6 +1378,7 @@ const onboarding_json = {
     ],
     "completeText": "Submit"
    }
+
 
 function getResultLink() {
     //document.getElementById("result_link").href=`/result?cid=${document.getElementById("cid").value}&pid=${document.getElementById("pid").value}`; 

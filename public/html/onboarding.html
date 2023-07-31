@@ -45,13 +45,40 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.13/moment-timezone-with-data-2012-2022.min.js"></script>
 
-
     <script src="/public/js/surveys.js"></script>
     <script src="/public/js/loadsurvey.js"></script>
 
-
-
     <script src="/public/js/main.js"></script>
+
+<style>
+
+.gridSelectedPatientList .selected, .gridSelectedPatientList tbody .selected {
+    background-color: #6ccbfb !important;
+}
+
+    #visit_history_tbl, #patient_list_tbl {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+      
+     #visit_history_tbl td, #visit_history_tbl th, #patient_list_tbl td, #patient_list_tbl th {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+      
+      
+     #visit_history_tbl  tr:hover, #patient_list_tbl tr:hover {background-color: #ddd;}
+      
+     #visit_history_tbl th, #patient_list_tbl th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #6bac94;
+        color: white;
+      }
+    
+</style>
 
 </head>
 
@@ -67,10 +94,10 @@
 				</div> -->
         </div>
 
-        <div class="row ">
+        <div class="row " >
 
 
-            <div class="wrap">
+            <div class="wrap" style="min-height:500px">
                 <div id="left-slider" ></div>
 
                 <div class="w3-teal" style="width:100%">
@@ -79,38 +106,51 @@
                     <h3 class="mb-4" style="display:inline; color:white;" id="pageTitle">Onboarding</h3>
 
                 </div>
-
               
                     <a href="/public/html/index.html" class="back-btn">
                         <img src="/public/images/therapy/back.png" alt="back" width="50" />
                     </a>
-               
-       
-                <div id="onboarding" class="surveyElement" onclick="w3_close()">
+              
+                    <button type="button" id="activateBtn" class="btn btn-primary" data-toggle="modal" data-target="#activateModal" style="float:right; margin:20px">
+                        Add Patient
+                    </button>
+
+                    <button type="button" id="activateBtnRemove" class="btn btn-danger" style="float:right; margin:20px" onclick="removePatient()" disabled>
+                      Remove Patient
+                  </button>
+
+                    <button type="button" id="activateBtnVisit" class="btn btn-primary" data-toggle="modal" data-target="#activateModalVisit" style="float:right; margin:20px" disabled>
+                        Add Visit
+                    </button>
+
+                    
+                    <button type="button" id="activateBtnViewVisits" class="btn btn-primary" data-toggle="modal" data-target="#activateModalVisitHistory" style="float:right; margin:20px" disabled>
+                        View Visit History
+                    </button>
+
+                <div id="onboarding_list">
+
 
                 </div>
 
             </div>
 
-
         </div>
     </div>
-
-    <button type="button" id="activateBtn" class="btn btn-primary" data-toggle="modal" data-target="#activateModal" style="display:none">
-        Activate App
-    </button>
 
     <div class="modal fade" id="activateModal" tabindex="-1" role="dialog" aria-labelledby="activateModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="activateModalLabel">Activate your Profile! </h5>
+              <h5 class="modal-title" id="activateModalLabel">Register Patient </h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body" id="">
-            Your App ID is inactive. Please activate your profile by clicking the link sent to you via email.
+                <div id="onboarding" class="surveyElement" onclick="w3_close()">
+                    
+                </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal"  id="closeAppInstall" >OK</button>
@@ -118,7 +158,74 @@
             </div>
           </div>
         </div>
+    </div>
+
+      <div class="modal fade" id="activateModalVisit" tabindex="-1" role="dialog" aria-labelledby="activateModalLabelVisit" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="activateModalLabelVisit">Add Visit </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-group" for="irritation_ring">Irritation from the ring?</label>    
+                    <input type="text" class="form-control" id="irritation_ring" name="irritation_ring" style="position:relative;top:-12px" required>
+                                   
+                    <label class="form-group" for="which_finger">Which finger will be used?</label>    
+                    <input type="text" class="form-control" id="which_finger" name="which_finger" style="position:relative;top:-12px"  required>
+
+                    <label class="form-group" for="weight">Weight:</label>    
+                    <input type="text" class="form-control" id="weight" name="weight" style="position:relative;top:-12px"  required>
+
+                    <label class="form-group" for="pulse">Pulse:</label>    
+                    <input type="text" class="form-control" id="pulse" name="pulse" style="position:relative;top:-12px"  required>
+                    
+                    <label class="form-group" for="blood_pressure">Blood pressure:</label>    
+                    <input type="text" class="form-control" id="blood_pressure" name="blood_pressure" style="position:relative;top:-12px"  required>
+
+                    <label class="form-group" for="neck_circumference">Neck circumference:</label>    
+                    <input type="text" class="form-control" id="neck_circumference" name="neck_circumference" style="position:relative;top:-12px"  required>
+
+                    <div class="form-group">
+                        <button type="submit" class="form-control btn btn-primary rounded submit px-3" onclick="addVisit()" >Submit</button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal"  id="closeAddVisit" style="display:none">OK</button> 
+             <!-- <a href="https://csmaapp.azurewebsites.net/" target="_blank" rel="noopener"><button type="button" class="btn btn-primary" onclick='document.getElementById("closeAppUpdate").click()'>Update new app</button></a>  -->
+            </div>
+          </div>
+        </div>
       </div>
+
+      <div class="modal fade" id="activateModalVisitHistory" tabindex="-1" role="dialog" aria-labelledby="activateModalLabelVisitHistory" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content" style="width:1000px">
+            <div class="modal-header">
+              <h5 class="modal-title" id="activateModalLabelVisitHistory">View Visit History </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div id="visit_history_div">
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+              <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal"  id="closeAppInstall" >OK</button> -->
+             <!-- <a href="https://csmaapp.azurewebsites.net/" target="_blank" rel="noopener"><button type="button" class="btn btn-primary" onclick='document.getElementById("closeAppUpdate").click()'>Update new app</button></a>  -->
+            </div>
+          </div>
+        </div>
+      </div>
+
 </body>
 
 </html>

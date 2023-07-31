@@ -123,6 +123,32 @@ app.get('/', isAuthenticated, async (req, res) => {
   //   res.send("<div style='font-size:16px'>Unauthorized use of the app. Please contact support!</div>")
 });
 
+
+app.get('/get_nih_onboarding_list', async (req, res) => {
+  let data  = [];
+  if (req.query.distinct == 'true') {
+     data = await mysql.customQuery("SELECT distinct subject_number, ring_serial_number, firstname, lastname FROM `rest-tracker`.nih_high_risk_ob_patient;")
+  } else {
+     data = await mysql.customQuery(`select * from nih_high_risk_ob_patient where subject_number="${req.query.subject_number}" order by date_created`)
+  }
+ 
+  res.send(data)
+});
+
+app.post('/add-visit', async (req, res) => {
+    const date_created = moment(req.body.date).format('YYYY-MM-DD')
+    const query = `insert into nih_high_risk_ob_patient (subject_number, ring_serial_number, firstname, lastname, data, date_created) values ('${req.body.subject_number}', '${req.body.ring_serial_number}', '${req.body.firstname}', '${req.body.lastname}', '${JSON.stringify(req.body)}', '${date_created}')`;
+    const data = await mysql.customQuery(query)    
+  
+  res.send("saved")
+})
+
+app.get('/removepatient', async (req, res) => {
+await mysql.customQuery(`delete FROM nih_high_risk_ob_patient where subject_number="${req.query.subject_number}"`)
+ res.send('patient removed')
+});
+
+
 app.get('/getmanifest', (req, res) => {
   const manifest = {
     "name": "CSMA App",
