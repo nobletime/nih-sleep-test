@@ -53,6 +53,14 @@ passport.use(new LocalStrategy({
 },
   async (req, username, password, done) => {
     const user = req.body.username.trim();    
+
+    if ( req.body.login_onboarding) {
+      if (req.body.password.trim() == "nihonboarding" && user == "admin") 
+     return done(null, true)
+     else 
+     return done(null, false, req.flash('message', 'Wrong credential'))
+    }
+
     const rows = await mysql.customQuery(`select * from patient_list where app_id = '${username}' and clinic_id=2`)
     
     if (rows.length == 0)
@@ -133,6 +141,11 @@ app.get('/get_nih_onboarding_list', async (req, res) => {
   }
  
   res.send(data)
+});
+
+app.get('/onboarding', (req, res) => {
+  const message = req.flash('message')
+  res.render('login-onboarding.ejs', { message: message }); 
 });
 
 app.post('/add-visit', async (req, res) => {
@@ -336,6 +349,12 @@ console.log('Server started! At http://localhost:' + port);
 app.post('/signin', passport.authenticate('local', {failureRedirect : '/signin',}), (req, res) => {
   res.redirect('/')
 });
+
+app.post('/signin-onboarding', passport.authenticate('local', {failureRedirect : '/signin',}), (req, res) => {
+  res.redirect('/public/html/onboarding.html')
+});
+
+
 
 app.get('/signin', (req, res) => {
   const message = req.flash('message')

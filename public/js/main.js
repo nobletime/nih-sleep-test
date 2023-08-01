@@ -63,6 +63,12 @@ function saveUsername() {
     localStorage.setItem("resttrackerapp-username", document.getElementById("username").value)
     localStorage.setItem("resttrackerapp-password", document.getElementById("password").value)
   }
+
+  if (document.getElementById("remember-onboarding").checked) {
+    localStorage.setItem("resttrackerapp-username-onboarding", document.getElementById("username").value)
+    localStorage.setItem("resttrackerapp-password-onboarding", document.getElementById("password").value)
+  }
+
   return true;
 }
 
