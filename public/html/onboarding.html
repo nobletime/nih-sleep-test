@@ -147,13 +147,30 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div class="modal-body" id="">
-                <div id="onboarding" class="surveyElement" onclick="w3_close()">
+            <div class="modal-body">
+              <div class="form-group" style = "font-size: 17px;color: black;font-weight: bold;">
+                <label class="form-group" for="subject_number">App Id:</label>    
+                <input type="text" class="form-control" id="subject_number" name="subject_number" style="position:relative;top:-12px" required>
+                               
+                <label class="form-group" for="ring_serial_number">Ring serial number:</label>    
+                <input type="text" class="form-control" id="ring_serial_number" name="ring_serial_number" style="position:relative;top:-12px"  required>
+
+                <label class="form-group" for="firstname">First segment subject identifier:</label>    
+                <input type="text" class="form-control" id="firstname" name="firstname" style="position:relative;top:-12px"  required>
+
+                <label class="form-group" for="lastname">Last segment subject identifier:</label>    
+                <input type="text" class="form-control" id="lastname" name="lastname" style="position:relative;top:-12px"  required>
+                
+                <div class="form-group">
+                    <button type="submit" class="form-control btn btn-primary rounded submit px-3" onclick="addPatient()" >Submit</button>
+                </div>
+            </div>
+                <div id="onboarding" class="surveyElement" onclick="w3_close()" style="display:none">
                     
                 </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal"  id="closeAppInstall" >OK</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal"  id="closeAppAddPatient" style="display: none;" >OK</button>
              <!-- <a href="https://csmaapp.azurewebsites.net/" target="_blank" rel="noopener"><button type="button" class="btn btn-primary" onclick='document.getElementById("closeAppUpdate").click()'>Update new app</button></a>  -->
             </div>
           </div>
@@ -192,7 +209,6 @@
                     <div class="form-group">
                         <button type="submit" class="form-control btn btn-primary rounded submit px-3" onclick="addVisit()" >Submit</button>
                     </div>
-
                 </div>
             </div>
             <div class="modal-footer">

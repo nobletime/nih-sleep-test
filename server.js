@@ -156,6 +156,13 @@ app.post('/add-visit', async (req, res) => {
   res.send("saved")
 })
 
+app.post('/addpatient', async (req, res) => {
+  const date_created = moment(new Date()).format('YYYY-MM-DD')
+  const query = `insert into nih_high_risk_ob_patient (subject_number, ring_serial_number, firstname, lastname, data, date_created) values ('${req.body.subject_number}', '${req.body.ring_serial_number}', '${req.body.firstname}', '${req.body.lastname}', '${JSON.stringify(req.body)}', '${date_created}')`;
+  const data = await mysql.customQuery(query)
+res.send("saved")
+})
+
 app.get('/removepatient', async (req, res) => {
 await mysql.customQuery(`delete FROM nih_high_risk_ob_patient where subject_number="${req.query.subject_number}"`)
  res.send('patient removed')
@@ -203,11 +210,7 @@ app.get('/getmanifest', (req, res) => {
 });
 
 app.post('/save-comment', async (req, res) => {
-
   if (req.body.type  == "onboarding") {
-    const date_created = moment(req.body.date).format('YYYY-MM-DD')
-    const query = `insert into nih_high_risk_ob_patient (subject_number, ring_serial_number, firstname, lastname, data, date_created) values ('${req.body.data.subject_number}', '${req.body.data.ring_serial_number}', '${req.body.data.firstname}', '${req.body.data.lastname}', '${JSON.stringify(req.body.data)}', '${date_created}')`;
-    const data = await mysql.customQuery(query)
     
   } else {
     const save = (req.body.type == 'general' || req.body.type == 'event' )?

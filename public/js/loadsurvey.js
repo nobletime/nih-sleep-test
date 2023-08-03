@@ -37,9 +37,9 @@ $(() => {
         case "event":
             json = event_json
             break;
-        case "onboarding":
-            json = onboarding_json
-            break;
+        // case "onboarding":
+        //     json = onboarding_json
+        //     break;
         default:
     }
 
@@ -221,6 +221,25 @@ function refreshViewHistory(){
             .then(data => {
                 refreshViewHistory();
                 document.getElementById("closeAddVisit").click();
+            });
+    }
+
+    function addPatient(){
+        const data = {            
+             subject_number : document.getElementById("subject_number").value ,
+             ring_serial_number : document.getElementById("ring_serial_number").value,
+             firstname : document.getElementById("firstname").value,
+             lastname : document.getElementById("lastname").value
+        }
+
+        fetch("/addpatient", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).then(response => response.text())
+            .then(data => {
+                refreshList();
+                document.getElementById("closeAppAddPatient").click();
             });
     }
 
