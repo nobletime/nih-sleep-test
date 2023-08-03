@@ -111,8 +111,8 @@ function refreshList(){
                 <tr>
                     <th>Subject Number</th>
                     <th>Ring Serial Number</th>
-                    <th>Firstname</th>
-                    <th>Lastname</th>
+                    <th>First segment subject identifier</th>
+                    <th>Last segment subject identifier</th>
                 </tr>                                   
         `
 

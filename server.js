@@ -53,14 +53,6 @@ passport.use(new LocalStrategy({
 },
   async (req, username, password, done) => {
     const user = req.body.username.trim();    
-
-    if ( req.body.login_onboarding) {
-      if (req.body.password.trim() == "nihonboarding" && user == "admin") 
-     return done(null, true)
-     else 
-     return done(null, false, req.flash('message', 'Wrong credential'))
-    }
-
     const rows = await mysql.customQuery(`select * from patient_list where app_id = '${username}' and clinic_id=2`)
     
     if (rows.length == 0)
@@ -91,6 +83,13 @@ passport.use(new LocalStrategy({
       if (password != moment(found.dob).format('MMDDYYYY') ) {
         return done(null, false, req.flash('message', 'Wrong Credential'))
       } else {
+        if (req.body.login_onboarding) {
+          if (found.can_onboard && found.can_onboard=='true') {
+            return done(null, found)
+          } else {
+            return done(null, false, req.flash('message', 'Unathorized User!'))
+          }          
+         }
         return done(null, found)
       }
     }
@@ -131,7 +130,6 @@ app.get('/', isAuthenticated, async (req, res) => {
   //   res.send("<div style='font-size:16px'>Unauthorized use of the app. Please contact support!</div>")
 });
 
-
 app.get('/get_nih_onboarding_list', async (req, res) => {
   let data  = [];
   if (req.query.distinct == 'true') {
@@ -143,7 +141,12 @@ app.get('/get_nih_onboarding_list', async (req, res) => {
   res.send(data)
 });
 
-app.get('/onboarding', (req, res) => {
+app.get('/onboarding', isAuthenticated, (req, res) => {
+  const message = req.flash('message')
+  res.render('onboarding.ejs', { message: message }); 
+});
+
+app.get('/onboarding-login', (req, res) => {
   const message = req.flash('message')
   res.render('login-onboarding.ejs', { message: message }); 
 });
@@ -151,8 +154,7 @@ app.get('/onboarding', (req, res) => {
 app.post('/add-visit', async (req, res) => {
     const date_created = moment(req.body.date).format('YYYY-MM-DD')
     const query = `insert into nih_high_risk_ob_patient (subject_number, ring_serial_number, firstname, lastname, data, date_created) values ('${req.body.subject_number}', '${req.body.ring_serial_number}', '${req.body.firstname}', '${req.body.lastname}', '${JSON.stringify(req.body)}', '${date_created}')`;
-    const data = await mysql.customQuery(query)    
-  
+    const data = await mysql.customQuery(query)      
   res.send("saved")
 })
 
@@ -354,7 +356,7 @@ app.post('/signin', passport.authenticate('local', {failureRedirect : '/signin',
 });
 
 app.post('/signin-onboarding', passport.authenticate('local', {failureRedirect : '/signin',}), (req, res) => {
-  res.redirect('/public/html/onboarding.html')
+  res.redirect('/onboarding')
 });
 
 
