@@ -77,6 +77,54 @@ $(() => {
             //   surveydata.clinic_name = cname
             //    surveydata.date = new Date(moment(new Date()).format('MM/DD/YYYY'));
 
+            if (surveydata.type == "pitsburgh") {
+                let c2  = 0
+                if (surveydata.data.c2 == 0) {
+                    c2 = 0
+                } else if (surveydata.data.c2 >=1 && surveydata.data.c2 <=2  ){
+                    c2 = 1
+                } else if (surveydata.data.c2 >=3 && surveydata.data.c2 <=4  ){
+                    c2 = 2
+                } else if (surveydata.data.c2 >=5 && surveydata.data.c2 <=6  ){
+                    c2 = 3
+                }
+
+                let c4  = 0
+                if (surveydata.data.c4 >= 85) {
+                    c4 = 0
+                } else if (surveydata.data.c4 >=75 && surveydata.data.c4 <=84  ){
+                    c4 = 1
+                } else if (surveydata.data.c4 >=65 && surveydata.data.c4 <=74  ){
+                    c4 = 2
+                } else if (surveydata.data.c4 <=64 ){
+                    c4 = 3
+                }
+
+                let c5  = 0
+                if (surveydata.data.c5 == 0) {
+                    c5 = 0
+                } else if (surveydata.data.c5 >=1 && surveydata.data.c5 <=9){
+                    c5 = 1
+                } else if (surveydata.data.c5 >=10 && surveydata.data.c5 <=18){
+                    c5 = 2
+                } else if (surveydata.data.c5 >=19 && surveydata.data.c5 <=27){
+                    c5 = 3
+                }
+
+                let c7  = 0
+                if (surveydata.data.c7 == 0) {
+                    c7 = 0
+                } else if (surveydata.data.c7 >=1 && surveydata.data.c7 <=2){
+                    c7 = 1
+                } else if (surveydata.data.c7 >=3 && surveydata.data.c7 <=4){
+                    c7 = 2
+                } else if (surveydata.data.c7 >=5 && surveydata.data.c7 <=6){
+                    c7 = 3
+                }
+
+                surveydata.data.psqi_score = surveydata.data.c1 + c2 +  surveydata.data.c3 + c4 + c5  + surveydata.data.c6 + c7
+            }
+
             fetch("/save-comment", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },

@@ -185,16 +185,94 @@ const pitsburgh_json = {
       "name": "page1",
       "elements": [
        {
-        "type": "text",
-        "name": "question1",
-        "title": "During the past month, what time have you usually gone to bed at night? BED TIME",
-        "isRequired": true
+        "type": "dropdown",
+        "name": "q1",
+        "title": "During the past week, what time have you usually gone to bed at night? BED TIME",
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "-5",
+          "text": "7 PM"
+         },
+         {
+          "value": "-4.5",
+          "text": "7:30 PM"
+         },
+         {
+          "value": "-4",
+          "text": "8 PM"
+         },
+         {
+          "value": "-3.5",
+          "text": "8:30 PM"
+         },
+         {
+          "value": "-3",
+          "text": "9 PM"
+         },
+         {
+          "value": "-2.5",
+          "text": "9:30 PM"
+         },
+         {
+          "value": "-2",
+          "text": "10 PM"
+         },
+         {
+          "value": "-1.5",
+          "text": "10:30 PM"
+         },
+         {
+          "value": "-1",
+          "text": "11 PM"
+         },
+         {
+          "value": "-0.5",
+          "text": "11:30 PM"
+         },
+         {
+          "value": "0",
+          "text": "12 AM"
+         },
+         {
+          "value": "0.5",
+          "text": "12:30 AM"
+         },
+         {
+          "value": "1",
+          "text": "1 AM"
+         },
+         {
+          "value": "1.5",
+          "text": "1:30 AM"
+         },
+         {
+          "value": "2",
+          "text": "2 AM"
+         },
+         {
+          "value": "2.5",
+          "text": "2:30 AM"
+         },
+         {
+          "value": "3",
+          "text": "3 AM"
+         },
+         {
+          "value": "3.5",
+          "text": "3:30 AM"
+         },
+         {
+          "value": "4",
+          "text": "4 AM"
+         }
+        ]
        },
        {
         "type": "dropdown",
-        "name": "question2",
+        "name": "q2",
         "startWithNewLine": false,
-        "title": "During the past month, how long (in minutes) has it usually taken you to fall asleep each night? NUMBER OF MINUTES",
+        "title": "During the past week, how long (in minutes) has it usually taken you to fall asleep each night?",
         "choices": [
          {
           "value": "0",
@@ -215,16 +293,78 @@ const pitsburgh_json = {
         ]
        },
        {
-        "type": "text",
-        "name": "question3",
-        "title": "During the past month, what time have you usually gotten up in the morning? GETTING UP TIME",
-        "isRequired": true
+        "type": "dropdown",
+        "name": "q3",
+        "title": "During the past week, what time have you usually gotten up in the morning? GETTING UP TIME",
+        "isRequired": true,
+        "choices": [
+         {
+          "value": "4.5",
+          "text": "4:30 AM"
+         },
+         {
+          "value": "5",
+          "text": "5 AM"
+         },
+         {
+          "value": "5.5",
+          "text": "5:30 AM"
+         },
+         {
+          "value": "6",
+          "text": "6 AM"
+         },
+         {
+          "value": "6.5",
+          "text": "6:30 AM"
+         },
+         {
+          "value": "7",
+          "text": "7 AM"
+         },
+         {
+          "value": "7.5",
+          "text": "7:30 AM"
+         },
+         {
+          "value": "8",
+          "text": "8 AM"
+         },
+         {
+          "value": "8.5",
+          "text": "8:30 AM"
+         },
+         {
+          "value": "9",
+          "text": "9 AM"
+         },
+         {
+          "value": "9.5",
+          "text": "9:30 AM"
+         },
+         {
+          "value": "10",
+          "text": "10 AM"
+         },
+         {
+          "value": "10.5",
+          "text": "10:30 AM"
+         },
+         {
+          "value": "11",
+          "text": "11 AM"
+         },
+         {
+          "value": "11.5",
+          "text": "11:30 AM"
+         }
+        ]
        },
        {
         "type": "dropdown",
-        "name": "question6",
+        "name": "q4",
         "startWithNewLine": false,
-        "title": "During the past month, how many hours of actual sleep did you get at night? (This may be different than the number of hours you spent in bed.) HOURS OF SLEEP PER NIGHT",
+        "title": "During the past week, how many hours of actual sleep did you get at night? (This may be different than the number of hours you spent in bed.)",
         "choices": [
          {
           "value": "0",
@@ -251,9 +391,104 @@ const pitsburgh_json = {
       "name": "page2",
       "elements": [
        {
+        "type": "dropdown",
+        "name": "qhoursslept",
+        "title": "During the past week, on average how many hours of actual sleep did you get at night? (This is not the number of hours you spent in bed.)",
+        "choices": [
+         {
+          "value": "03.579",
+          "text": "1 hour"
+         },
+         {
+          "value": "1.5",
+          "text": "1.5 hours"
+         },
+         {
+          "value": "2",
+          "text": "2 hours"
+         },
+         {
+          "value": "2.5",
+          "text": "2.5 hours"
+         },
+         {
+          "value": "3",
+          "text": "3 hours"
+         },
+         {
+          "value": "3.5",
+          "text": "3.5 hours"
+         },
+         {
+          "value": "4",
+          "text": "4 hours"
+         },
+         {
+          "value": "4.5",
+          "text": "4.5 hours"
+         },
+         {
+          "value": "5",
+          "text": "5 hours"
+         },
+         {
+          "value": "5.5",
+          "text": "5.5 hours"
+         },
+         {
+          "value": "6",
+          "text": "6 hours"
+         },
+         {
+          "value": "6.5",
+          "text": "6.5 hours"
+         },
+         {
+          "value": "7",
+          "text": "7 hours"
+         },
+         {
+          "value": "7.5",
+          "text": "7.5 hours"
+         },
+         {
+          "value": "8",
+          "text": "8 hours"
+         },
+         {
+          "value": "8.5",
+          "text": "8.5 hours"
+         },
+         {
+          "value": "9",
+          "text": "9 hours"
+         },
+         {
+          "value": "9.5",
+          "text": "9.5 hours"
+         },
+         {
+          "value": "10",
+          "text": "10 hours"
+         },
+         {
+          "value": "10.5",
+          "text": "10.5 hours"
+         },
+         {
+          "value": "11",
+          "text": "11 hours"
+         },
+         {
+          "value": "11.5",
+          "text": "11.5 hours"
+         }
+        ]
+       },
+       {
         "type": "matrix",
-        "name": "question21",
-        "title": "During the past month, how often have you had trouble sleeping because you",
+        "name": "q5",
+        "title": "During the past week, how often have you had trouble sleeping because you",
         "isRequired": true,
         "columns": [
          {
@@ -275,125 +510,125 @@ const pitsburgh_json = {
         ],
         "rows": [
          {
-          "value": "Row 1",
+          "value": "a",
           "text": "Cannot get to sleep within 30 minutes"
          },
          {
-          "value": "Row 2",
+          "value": "b",
           "text": "Wake up in the middle of the night or early morning"
          },
          {
-          "value": "Row 3",
+          "value": "c",
           "text": "Have to get up to use the bathroom"
          },
          {
-          "value": "Row 4",
+          "value": "d",
           "text": "Cannot breathe comfortably"
          },
          {
-          "value": "Row 5",
+          "value": "e",
           "text": "Cough or snore loudly"
          },
          {
-          "value": "Row 6",
+          "value": "f",
           "text": "Feel too cold"
          },
          {
-          "value": "Row 7",
+          "value": "g",
           "text": "Feel too hot"
          },
          {
-          "value": "Row 8",
+          "value": "h",
           "text": "Had bad dreams"
          },
          {
-          "value": "Row 9",
+          "value": "i",
           "text": "Have pain"
          },
          {
-          "value": "Row 10",
+          "value": "j",
           "text": "Other reason(s)"
          }
         ]
        },
        {
         "type": "radiogroup",
-        "name": "question17",
-        "title": "During the past month, how often have you taken medicine to help you sleep (prescribed or \"over the counter\")?",
+        "name": "q6",
+        "title": "During the past week, how often have you taken medicine to help you sleep (prescribed or \"over the counter\")?",
         "isRequired": true,
         "choices": [
          {
-          "value": "Item 2",
+          "value": "0",
           "text": "Not during the past month"
          },
          {
-          "value": "Item 3",
+          "value": "1",
           "text": "Less than once a week"
          },
          {
-          "value": "Item 4",
+          "value": "2",
           "text": "Once or twice a week"
          },
          {
-          "value": "Item 5",
+          "value": "3",
           "text": "Three or more times a week"
          }
         ]
        },
        {
         "type": "radiogroup",
-        "name": "question18",
+        "name": "q7",
         "startWithNewLine": false,
-        "title": "During the past month, how often have you had trouble staying awake while driving, eatingmeals, or engaging in social activity?",
+        "title": "During the past week, how often have you had trouble staying awake while driving, eating meals, or engaging in social activity?",
         "isRequired": true,
         "choices": [
          {
-          "value": "Item 2",
+          "value": "0",
           "text": "Not during the past month"
          },
          {
-          "value": "Item 3",
+          "value": "1",
           "text": "Less than once a week"
          },
          {
-          "value": "Item 4",
+          "value": "2",
           "text": "Once or twice a week"
          },
          {
-          "value": "Item 5",
+          "value": "3",
           "text": "Three or more times a week"
          }
         ]
        },
        {
         "type": "radiogroup",
-        "name": "question16",
-        "title": "During the past month, how much of a problem has it been for you to keep up enough enthusiasm to get things done?",
+        "name": "q8",
+        "title": "During the past week, how much of a problem has it been for you to keep up enough enthusiasm to get things done?",
         "isRequired": true,
         "choices": [
          {
-          "value": "Item 1",
+          "value": "0",
           "text": "No problem at all"
          },
          {
-          "value": "Item 2",
+          "value": "1",
           "text": "Only a very slight problem"
          },
          {
-          "value": "Item 3",
+          "value": "2",
           "text": "Somewhat of a problem"
          },
          {
-          "value": "Item 4",
+          "value": "3",
           "text": "A very big problem"
          }
         ]
        },
        {
         "type": "radiogroup",
-        "name": "question5",
+        "name": "q9",
         "startWithNewLine": false,
-        "title": "During the past month, how would you rate your sleep quality overall?",
+        "title": "During the past week, how would you rate your sleep quality overall?",
         "isRequired": true,
         "choices": [
          {
@@ -416,8 +651,8 @@ const pitsburgh_json = {
        },
        {
         "type": "radiogroup",
-        "name": "question19",
-        "title": "During the past month, how much of a problem has it been for you to keep up enoughenthusiasm to get things done?",
+        "name": "q11",
+        "title": "During the past week, how much of a problem has it been for you to keep up enough enthusiasm to get things done?",
         "isRequired": true,
         "choices": [
          {
@@ -440,7 +675,7 @@ const pitsburgh_json = {
        },
        {
         "type": "radiogroup",
-        "name": "question20",
+        "name": "q12",
         "startWithNewLine": false,
         "title": "Do you have a bed partner or room mate?",
         "isRequired": true,
@@ -465,7 +700,7 @@ const pitsburgh_json = {
        },
        {
         "type": "matrix",
-        "name": "question22",
+        "name": "q13",
         "title": "If you have a room mate or bed partner, ask him/her how often in the past month you have had",
         "isRequired": true,
         "columns": [
@@ -508,6 +743,61 @@ const pitsburgh_json = {
           "text": "Other restlessness while you sleep"
          }
         ]
+       },
+       {
+        "type": "text",
+        "name": "c1",
+        "title": "C1",
+        "defaultValueExpression": "{q9}",
+        "readOnly": true
+       },
+       {
+        "type": "text",
+        "name": "c2",
+        "startWithNewLine": false,
+        "title": "C2",
+        "defaultValueExpression": "{q2} + {q5.a}",
+        "readOnly": true
+       },
+       {
+        "type": "text",
+        "name": "c3",
+        "startWithNewLine": false,
+        "title": "C3",
+        "defaultValueExpression": "{q4}",
+        "readOnly": true
+       },
+       {
+        "type": "text",
+        "name": "c4",
+        "startWithNewLine": false,
+        "title": "C4",
+        "defaultValueExpression": "({qhoursslept} / ({q3}- {q1})  ) *100",
+        "readOnly": true
+       },
+       {
+        "type": "text",
+        "name": "c5",
+        "startWithNewLine": false,
+        "title": "C5",
+        "defaultValueExpression": "{q5.b}+ {q5.c} + {q5.d}+ {q5.e} + {q5.f}+ {q5.g} + {q5.h}+ {q5.i} + {q5.j}",
+        "readOnly": true
+       },
+       {
+        "type": "text",
+        "name": "c6",
+        "startWithNewLine": false,
+        "title": "C6",
+        "defaultValueExpression": "{q6}",
+        "readOnly": true
+       },
+       {
+        "type": "text",
+        "name": "c7",
+        "startWithNewLine": false,
+        "title": "C7",
+        "defaultValueExpression": "{q7}+{q8}",
+        "readOnly": true
        }
       ],
       "description": "For each of the remaining questions, check the one best response. Please answer all questions. During the past month, how often have you had trouble sleeping because you ."
