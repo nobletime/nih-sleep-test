@@ -187,7 +187,7 @@ const pitsburgh_json = {
        {
         "type": "dropdown",
         "name": "q1",
-        "title": "During the past week, what time have you usually gone to bed at night? BED TIME",
+        "title": "During the past month, what time have you usually gone to bed at night? BED TIME",
         "isRequired": true,
         "choices": [
          {
@@ -272,7 +272,7 @@ const pitsburgh_json = {
         "type": "dropdown",
         "name": "q2",
         "startWithNewLine": false,
-        "title": "During the past week, how long (in minutes) has it usually taken you to fall asleep each night?",
+        "title": "During the past month, how long (in minutes) has it usually taken you to fall asleep each night?",
         "choices": [
          {
           "value": "0",
@@ -295,7 +295,7 @@ const pitsburgh_json = {
        {
         "type": "dropdown",
         "name": "q3",
-        "title": "During the past week, what time have you usually gotten up in the morning? GETTING UP TIME",
+        "title": "During the past month, what time have you usually gotten up in the morning? GETTING UP TIME",
         "isRequired": true,
         "choices": [
          {
@@ -364,7 +364,7 @@ const pitsburgh_json = {
         "type": "dropdown",
         "name": "q4",
         "startWithNewLine": false,
-        "title": "During the past week, how many hours of actual sleep did you get at night? (This may be different than the number of hours you spent in bed.)",
+        "title": "During the past month, how many hours of actual sleep did you get at night? (This may be different than the number of hours you spent in bed.)",
         "choices": [
          {
           "value": "0",
@@ -393,7 +393,7 @@ const pitsburgh_json = {
        {
         "type": "dropdown",
         "name": "qhoursslept",
-        "title": "During the past week, on average how many hours of actual sleep did you get at night? (This is not the number of hours you spent in bed.)",
+        "title": "During the past month, on average how many hours of actual sleep did you get at night? (This is not the number of hours you spent in bed.)",
         "choices": [
          {
           "value": "03.579",
@@ -488,7 +488,7 @@ const pitsburgh_json = {
        {
         "type": "matrix",
         "name": "q5",
-        "title": "During the past week, how often have you had trouble sleeping because you",
+        "title": "During the past month, how often have you had trouble sleeping because you",
         "isRequired": true,
         "columns": [
          {
@@ -554,7 +554,7 @@ const pitsburgh_json = {
        {
         "type": "radiogroup",
         "name": "q6",
-        "title": "During the past week, how often have you taken medicine to help you sleep (prescribed or \"over the counter\")?",
+        "title": "During the past month, how often have you taken medicine to help you sleep (prescribed or \"over the counter\")?",
         "isRequired": true,
         "choices": [
          {
@@ -579,7 +579,7 @@ const pitsburgh_json = {
         "type": "radiogroup",
         "name": "q7",
         "startWithNewLine": false,
-        "title": "During the past week, how often have you had trouble staying awake while driving, eating meals, or engaging in social activity?",
+        "title": "During the past month, how often have you had trouble staying awake while driving, eating meals, or engaging in social activity?",
         "isRequired": true,
         "choices": [
          {
@@ -603,7 +603,7 @@ const pitsburgh_json = {
        {
         "type": "radiogroup",
         "name": "q8",
-        "title": "During the past week, how much of a problem has it been for you to keep up enough enthusiasm to get things done?",
+        "title": "During the past month, how much of a problem has it been for you to keep up enough enthusiasm to get things done?",
         "isRequired": true,
         "choices": [
          {
@@ -628,7 +628,7 @@ const pitsburgh_json = {
         "type": "radiogroup",
         "name": "q9",
         "startWithNewLine": false,
-        "title": "During the past week, how would you rate your sleep quality overall?",
+        "title": "During the past month, how would you rate your sleep quality overall?",
         "isRequired": true,
         "choices": [
          {
@@ -652,7 +652,7 @@ const pitsburgh_json = {
        {
         "type": "radiogroup",
         "name": "q11",
-        "title": "During the past week, how much of a problem has it been for you to keep up enough enthusiasm to get things done?",
+        "title": "During the past month, how much of a problem has it been for you to keep up enough enthusiasm to get things done?",
         "isRequired": true,
         "choices": [
          {
@@ -1059,7 +1059,7 @@ const general_sleep_related_json = {
         "defaultValueExpression": "{q1}+{q2}+{q3}+{q4}+{q5}+{q6}+{q7}+{q8}"
        }
       ],
-      "description": "For each of the remaining questions, check the one best response. Please answer all questions. During the past week, how often have you had trouble sleeping because you ."
+      "description": "For each of the remaining questions, check the one best response. Please answer all questions. During the past month, how often have you had trouble sleeping because you ."
      }
     ],
     "navigateToUrlOnCondition": [
