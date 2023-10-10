@@ -152,7 +152,7 @@ app.get('/onboarding-login', (req, res) => {
 });
 
 app.post('/add-visit', async (req, res) => {
-    const date_created = moment(req.body.date).format('YYYY-MM-DD')
+    const date_created = moment(req.body.created_date).format('YYYY-MM-DD')
     const query = `insert into nih_high_risk_ob_patient (subject_number, ring_serial_number, firstname, lastname, data, date_created) values ('${req.body.subject_number}', '${req.body.ring_serial_number}', '${req.body.firstname}', '${req.body.lastname}', '${JSON.stringify(req.body)}', '${date_created}')`;
     const data = await mysql.customQuery(query)      
   res.send("saved")

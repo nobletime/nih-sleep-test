@@ -19,11 +19,11 @@ $(() => {
     let json = {};
 
     switch (document.querySelector(".surveyElement").id) {
-        case "isi":
-            json = isi
-            break;
         case "general":
             json = general_json
+            break;
+        case "isi":
+            json = isi
             break;
         case "pitsburgh":
             json = pitsburgh_json
@@ -220,6 +220,7 @@ function refreshViewHistory(){
             
             const header = `<table id="visit_history_tbl" style="margin:10px"> 
                         <tr>
+                            <th>Date</th>
                             <th>Irritation from the ring</th>
                             <th>Which finger will be used</th>
                             <th>Weight</th>
@@ -236,7 +237,7 @@ function refreshViewHistory(){
                 const p = JSON.parse(d.data)
                 if (!p.irritation_ring) continue;
                 rows = rows + `<tr onclick="toggleClass(this,'selected');"> 
-                    <td>${p.irritation_ring}  </td> <td> ${p.finger_used} </td> <td> ${p.weight} </td>  <td> ${p.pulse} </td>  <td> ${p.blood_pressure} </td><td> ${p.neck_circumference} </td>
+                   <td>${p.created_date} </td><td>${p.irritation_ring}  </td> <td> ${p.finger_used} </td> <td> ${p.weight} </td>  <td> ${p.pulse} </td>  <td> ${p.blood_pressure} </td><td> ${p.neck_circumference} </td>
                     
                     </tr>`
             }
@@ -247,7 +248,8 @@ function refreshViewHistory(){
     }
 
     function addVisit(){
-        const visitData = {            
+        const visitData = {   
+             created_date : document.getElementById("created_date").value,         
              subject_number : selectedSubject["selectedSubjectNumber"],
              ring_serial_number : selectedSubject["selectedRingSerial"],
              firstname : selectedSubject["selectedFirstname"],
