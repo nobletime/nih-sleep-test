@@ -1,5 +1,7 @@
 $(() => {
 
+document.getElementById("created_date").value = moment(new Date()).format('YYYY-MM-DD');
+
     const params = new URLSearchParams(window.location.search)
     let cid = "", pid = "", cname = "";
 
@@ -161,6 +163,7 @@ function refreshList(){
                     <th>Ring Serial Number</th>
                     <th>First segment subject identifier</th>
                     <th>Last segment subject identifier</th>
+                    <th>Pregnancy due date</th>
                 </tr>                                   
         `
 
@@ -169,7 +172,7 @@ function refreshList(){
     let rows = "";
     for (const d of data) {
         rows = rows + `<tr onclick="toggleClass(this,'selected');"> 
-            <td>${d.subject_number}  </td> <td> ${d.ring_serial_number} </td> <td>${d.firstname}  </td> <td> ${d.lastname} </td>
+            <td>${d.subject_number}  </td> <td> ${d.ring_serial_number} </td> <td>${d.firstname}  </td> <td> ${d.lastname} </td> <td> ${(d.preg_due_date)? moment(d.preg_due_date).format("MM/DD/YYYY") : ''} </td>
             
             </tr>`
     }
@@ -249,7 +252,7 @@ function refreshViewHistory(){
 
     function addVisit(){
         const visitData = {   
-             created_date : document.getElementById("created_date").value,         
+             created_date : document.getElementById("created_date").value,      
              subject_number : selectedSubject["selectedSubjectNumber"],
              ring_serial_number : selectedSubject["selectedRingSerial"],
              firstname : selectedSubject["selectedFirstname"],
@@ -279,7 +282,8 @@ function refreshViewHistory(){
              subject_number : document.getElementById("subject_number").value ,
              ring_serial_number : document.getElementById("ring_serial_number").value,
              firstname : document.getElementById("firstname").value,
-             lastname : document.getElementById("lastname").value
+             lastname : document.getElementById("lastname").value,
+             preg_due_date : document.getElementById("preg_due_date").value
         }
 
         fetch("/addpatient", {

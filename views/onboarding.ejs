@@ -148,7 +148,7 @@
             </div>
             <div class="modal-body">
               <div class="form-group" style = "font-size: 17px;color: black;font-weight: bold;">
-                <label class="form-group" for="subject_number">App Id:</label>    
+                <label class="form-group" for="subject_number">App Id:</label>
                 <input type="text" class="form-control" id="subject_number" name="subject_number" style="position:relative;top:-12px" required>
                                
                 <label class="form-group" for="ring_serial_number">Ring serial number:</label>    
@@ -159,6 +159,9 @@
 
                 <label class="form-group" for="lastname">Last segment subject identifier:</label>    
                 <input type="text" class="form-control" id="lastname" name="lastname" style="position:relative;top:-12px"  required>
+
+                <label class="form-group" for="preg_due_date">Pregnancy due date:</label>
+                <input type="date" class="form-control" id="preg_due_date" name="preg_due_date" style="position:relative;top:-12px" required>
                 
                 <div class="form-group">
                     <button type="submit" class="form-control btn btn-primary rounded submit px-3" onclick="addPatient()" >Submit</button>
@@ -188,7 +191,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label class="form-group" for="irritation_ring">Date</label>    
-                    <input type="date" class="form-control" id="created_date" name="created_date" style="position:relative;top:-12px" value="2018-07-22" required>
+                    <input type="date" class="form-control" id="created_date" name="created_date" style="position:relative;top:-12px" required>
 
                     <label class="form-group" for="irritation_ring">Irritation from the ring?</label>    
                     <input type="text" class="form-control" id="irritation_ring" name="irritation_ring" style="position:relative;top:-12px" required>
