@@ -110,9 +110,13 @@
                         <img src="/public/images/therapy/back.png" alt="back" width="50" />
                     </a>
               
-                    <button type="button" id="activateBtn" class="btn btn-primary" data-toggle="modal" data-target="#activateModal" style="float:right; margin:20px">
+                    <button type="button" id="activateBtn" onclick="addPatientBtn()" class="btn btn-primary" data-toggle="modal" data-target="#activateModal" style="float:right; margin:20px">
                         Add Patient
                     </button>
+
+                    <button type="button" id="activateBtnEdit" onclick="editPatient()" class="btn btn-primary" data-toggle="modal" data-target="#activateModal" style="float:right; margin:20px" disabled>
+                      Edit Patient
+                  </button>
 
                     <button type="button" id="activateBtnRemove" class="btn btn-danger" style="float:right; margin:20px" onclick="removePatient()" disabled>
                       Remove Patient
@@ -121,7 +125,6 @@
                     <button type="button" id="activateBtnVisit" class="btn btn-primary" data-toggle="modal" data-target="#activateModalVisit" style="float:right; margin:20px" disabled>
                         Add Visit
                     </button>
-
                     
                     <button type="button" id="activateBtnViewVisits" class="btn btn-primary" data-toggle="modal" data-target="#activateModalVisitHistory" style="float:right; margin:20px" disabled>
                         View Visit History
@@ -141,7 +144,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="activateModalLabel">Register Patient </h5>
+              <h5 class="modal-title" id="activateModalLabel">Add Patient </h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -162,6 +165,8 @@
 
                 <label class="form-group" for="preg_due_date">Pregnancy due date:</label>
                 <input type="date" class="form-control" id="preg_due_date" name="preg_due_date" style="position:relative;top:-12px" required>
+
+                <input type="hidden" id="db_id" name="db_id">
                 
                 <div class="form-group">
                     <button type="submit" class="form-control btn btn-primary rounded submit px-3" onclick="addPatient()" >Submit</button>
