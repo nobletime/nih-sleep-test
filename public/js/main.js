@@ -31,6 +31,7 @@ $(() => {
   const userProfile = JSON.parse(localStorage.getItem("rest-tracker-app-profile"));
 
   if (userProfile == null) {
+    if (document.getElementById("app-logo"))
     document.getElementById("app-logo").src = "/public/images/rest-logo.jpg"
     // if (document.getElementById("activateBtn"))
     //   document.getElementById("activateBtn").click()
@@ -40,6 +41,7 @@ $(() => {
       window.location.replace("/signout");
     }
     if (userProfile.clinic_id && userProfile.clinic_id == 2) {
+      if (document.getElementById("app-logo"))
       document.getElementById("app-logo").src = "/public/images/rest-logo.jpg"
     }
   }

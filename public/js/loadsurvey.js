@@ -1,5 +1,6 @@
 $(() => {
 
+    if (document.getElementById("created_date"))
     document.getElementById("created_date").value = moment(new Date()).format('YYYY-MM-DD');
 
     const params = new URLSearchParams(window.location.search)
