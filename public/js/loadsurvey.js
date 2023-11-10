@@ -1,7 +1,7 @@
 $(() => {
 
     if (document.getElementById("created_date"))
-    document.getElementById("created_date").value = moment(new Date()).format('YYYY-MM-DD');
+        document.getElementById("created_date").value = moment(new Date()).format('YYYY-MM-DD');
 
     const params = new URLSearchParams(window.location.search)
     let cid = "", pid = "", cname = "";
@@ -152,7 +152,6 @@ $(() => {
     if (document.querySelector(".surveyElement").id == "onboarding") {
         refreshList()
     }
-
 })
 
 function refreshList() {
@@ -170,12 +169,15 @@ function refreshList() {
 
             header + '</table>'
 
-            let rows = "";
+            let rows = "", included = [];
             for (const d of data) {
-                rows = rows + `<tr id="${d.id}" onclick="toggleClass(this,'selected');"> 
-            <td>${d.subject_number}  </td> <td> ${d.ring_serial_number} </td> <td>${d.firstname}  </td> <td> ${d.lastname} </td> <td> ${(d.preg_due_date) ? moment(d.preg_due_date).format("MM/DD/YYYY") : ''} </td>
-            
-            </tr>`
+                if (!included.includes(d.subject_number)) {
+                    included.push(d.subject_number);
+                    rows = rows + `<tr id="${d.id}" onclick="toggleClass(this,'selected');"> 
+                <td>${d.subject_number}  </td> <td> ${d.ring_serial_number} </td> <td>${d.firstname}  </td> <td> ${d.lastname} </td> <td> ${(d.preg_due_date) ? moment(d.preg_due_date).format("MM/DD/YYYY") : ''} </td>            
+                </tr>`
+                }
+
             }
 
             const tbl = header + rows + '</table>'
@@ -333,12 +335,12 @@ function editPatient() {
         }
     })
 
-    document.getElementById("db_id").value = selectedSubject["id"] 
-    document.getElementById("subject_number").value = selectedSubject["selectedSubjectNumber"] 
-    document.getElementById("ring_serial_number").value = selectedSubject["selectedRingSerial"] 
-    document.getElementById("firstname").value = selectedSubject["selectedFirstname"] 
-    document.getElementById("lastname").value = selectedSubject["selectedLastname"]     
-    document.getElementById("preg_due_date").value = moment(selectedSubject["selectedPregDueDate"]).format('YYYY-MM-DD'); 
+    document.getElementById("db_id").value = selectedSubject["id"]
+    document.getElementById("subject_number").value = selectedSubject["selectedSubjectNumber"]
+    document.getElementById("ring_serial_number").value = selectedSubject["selectedRingSerial"]
+    document.getElementById("firstname").value = selectedSubject["selectedFirstname"]
+    document.getElementById("lastname").value = selectedSubject["selectedLastname"]
+    document.getElementById("preg_due_date").value = moment(selectedSubject["selectedPregDueDate"]).format('YYYY-MM-DD');
 
 }
 
