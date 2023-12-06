@@ -40,6 +40,9 @@ $(() => {
         case "event":
             json = event_json
             break;
+         case "dsa":
+            json = dsa_json
+            break;
         // case "onboarding":
         //     json = onboarding_json
         //     break;

@@ -133,7 +133,7 @@ app.get('/', isAuthenticated, async (req, res) => {
 app.get('/get_nih_onboarding_list', async (req, res) => {
   let data  = [];
   if (req.query.distinct == 'true') {
-     data = await mysql.customQuery("SELECT distinct id, subject_number, ring_serial_number, firstname, lastname, preg_due_date FROM `rest-tracker`.nih_high_risk_ob_patient;")
+     data = await mysql.customQuery("SELECT distinct id, subject_number, ring_serial_number, upper(firstname) as firstname, upper(lastname) as lastname, preg_due_date FROM `rest-tracker`.nih_high_risk_ob_patient order by firstname;")
   } else {
      data = await mysql.customQuery(`select * from nih_high_risk_ob_patient where subject_number="${req.query.subject_number}" order by date_created`)
   } 

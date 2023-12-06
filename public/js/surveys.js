@@ -45,44 +45,6 @@ const dsa_json = {
                     ]
                 }
             ]
-        },
-        {
-            "name": "page2",
-            "elements": [
-                {
-                    "type": "radiogroup",
-                    "name": "DSA2",
-                    "title": "How would you rate the quality of your sleep last night?",
-                    "hideNumber": true,
-                    "isRequired": true,
-                    "choices": [
-                        {
-                            "value": "1",
-                            "text": "1. Very poor - could not fall asleep or stay asleep and felt extremely unrested in the morning"
-                        },
-                        {
-                            "value": "2",
-                            "text": "2. Poor - Difficulty failing asleep, staying asleep, woke up unrefreshed"
-                        },
-                        {
-                            "value": "3",
-                            "text": "3. Fair - Fell asleep relatively quickly, a few brief awakenings, woke up feeling OK"
-                        },
-                        {
-                            "value": "4",
-                            "text": "4. Good - Fell asleep relatively quickly, no awakenings, woke up feeling OK"
-                        },
-                        {
-                            "value": "5",
-                            "text": "5. Very good - Fell asleep quickly, no awakenings, woke up rested"
-                        },
-                        {
-                            "value": "6",
-                            "text": "6. NA"
-                        }
-                    ]
-                }
-            ]
         }
     ],
     "navigateToUrlOnCondition": [
