@@ -260,6 +260,7 @@ app.get('/checkcode', async (req, res) => {
   }
 })
 
+
 app.get('/getPatList', async (req, res) => {
   const data = await mysql.selectRingIdsWhere("ring_id", "patient_list", `ring_id != '' and ring_id is not null`)
   res.send(data)

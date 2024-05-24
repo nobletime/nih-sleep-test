@@ -61,18 +61,26 @@
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.13/moment-timezone-with-data-2012-2022.min.js"></script>
 
-		<!-- <script src="https://cdn.jsdelivr.net/npm/pdfkit@0.10.0/js/pdfkit.standalone.js"></script>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/pdfkit@0.10.0/js/pdfkit.standalone.js"></script>
 		<script src="https://bundle.run/blob-stream@0.1.3"></script>
 		<script src="https://cdn.jsdelivr.net/npm/svg-to-pdfkit@0.1.8/source.js"></script> -->
-
 
 	<script src="/public/js/main.js"></script>
 	<script src="/public/js/config.js"></script>
 	<script src="/public/js/chart.js"></script>
 	<script src="/public/js/sleep-graph.js"></script>
 	<script src="/public/js/app-data.js"></script>
+	<script src="/public/js/single-charts.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
 
 	<style>
+		.commentbox {
+			border-radius: 15px;
+			color: black;
+			padding: 10px;
+			background-color: lightgray;
+		}
+
 		.axislistClass option {
 			font-size: 12px;
 		}
@@ -93,6 +101,18 @@
 			font-size: 12px;
 			position: absolute;
 			z-index: 99;
+		}
+
+		.singlechart-backward-forward {
+			display: block;
+			position: absolute;
+			z-index: 99999 !important;
+			color: white;
+			width: 0px;
+			height: 0px;
+			border: 35px solid black;
+			border-top-color: transparent;
+			border-bottom-color: transparent;
 		}
 
 		.backward-forward {
@@ -122,12 +142,47 @@
 		.highcharts-tooltip {
 			z-index: 100
 		}
-	</style>
 
+		/* Style the tab */
+		.tab {
+			overflow: hidden;
+			border: 1px solid #ccc;
+			background-color: #f1f1f1;
+		}
+
+		/* Style the buttons inside the tab */
+		.tab button {
+			background-color: inherit;
+			float: left;
+			border: none;
+			outline: none;
+			cursor: pointer;
+			padding: 8px 10px;
+			transition: 0.3s;
+			font-size: 17px;
+		}
+
+		/* Change background color of buttons on hover */
+		.tab button:hover {
+			background-color: #ddd;
+		}
+
+		/* Create an active/current tablink class */
+		.tab button.active {
+			background-color: #ccc;
+		}
+
+		/* Style the tab content */
+		.tabcontent {
+			display: none;
+			padding: 6px 12px;
+			border: 1px solid #ccc;
+			border-top: none;
+		}
+	</style>
 </head>
 
 <body class="fullscreen">
-
 
 	<div class="container" id="reportpage">
 		<div class="row justify-content-center">
@@ -140,7 +195,6 @@
 
 		<div class="row ">
 
-
 			<div class="wrap">
 
 				<div id="left-slider"></div>
@@ -150,120 +204,163 @@
 						style="font-size:38px">&#9776;</button>
 
 					<h3 class="mb-4" style="display:inline; color:white;" id="pageTitle">My Data</h3>
-					<img id="app-logo" src="/public/images/logo.jpg"
+					<img id="app-logo" src="/public/images/csma-logo.jpg"
 						style="position: absolute;    top: 5px;    right: 0; height:60px" />
 				</div>
 				<!-- <div class="img" style="background-image: url(/public/images/bg-1.jpg);"></div> -->
-
 
 				<!-- <div >
               <a href="#test">
                 <img src="/public/images/therapy/back.png" width="100" />
            </a>
             </div> -->
-				<div class="login-wrap p-4 p-md-5 justify-content-center" onclick="w3_close()">
+				<div style="margin:7px" onclick="w3_close()">
 					<a href="/public/html/index.html" class="back-btn">
-						<img src="/public/images/therapy/back.png" alt="back" width="50" />
+						<button style=" 
+							background: url(/public/images/therapy/back.png) no-repeat;
+							cursor:pointer;
+							border: none;
+							color:green;
+							width: 60px;							
+						"> - </button>
+						<!-- <img src="/public/images/therapy/back.png" alt="back" width="50" /> -->
 					</a>
 
-					<div style="z-index:999;float:right">
-						<!-- <label for="code">Code :</label>  onkeyup="codeEntered(this)" -->
-						<input type="text" id="code" name="code" > 
-						<span style="background-color: gray;border:1px solid gray;margin:5px; padding:8px 10px 8px 10px;" onclick="codeEntered()">&nbsp;</span>
-					</div>
+					<!-- <div style="z-index:999;float:right">					
+						<input type="text" id="code" name="code">
+						<span
+							style="background-color: gray;border:1px solid gray;margin:5px; padding:8px 10px 8px 10px;"
+							onclick="codeEntered()">&nbsp;</span>
+					</div> -->
 				</div>
 
-				<div>
-					<div style="display:none">
-						<input class="form-check-input" type="checkbox" id="mouseTrackerSleep"
-							onchange="toggleTracker()" checked>
-						<label class="form-check-label" for="mouseTrackerSleep"> Enable Screen Values </label>
-					</div>
-					<div style="padding:20px;display:block" >
-						<!-- <input type="text" id="patId" value="TB8NCU" style="width:100%; margin-bottom:15px" />  -->
-						<div id="mydatadiv" style="display:none">
-							<select class="form-select" aria-label="Default select example" id="patIdList">
-							</select>
+				<div class="tab">
+					<button class="tablinks active" onclick="openCity(event, 'singlenight')">Recent Night</button>
+					<button class="tablinks" onclick="openCity(event, 'comment')">Comments</button>
+					<button class="tablinks" onclick="openCity(event, 'report')">Report</button>
+					<!-- <button class="tablinks" onclick="openCity(event, 'trend')">Trend</button> -->
+					<!--<button class="tablinks" onclick="openCity(event, 'papdata')"> Pap</button>-->
+				</div>
 
+				<!-- Tab content -->
+				<div id="mloader" style="text-align:center;display:block">
+					<img src="/public/images/loading.gif" height="100" alt="loading" style="margin:5px;" />
+				</div>
+				<div id="tabDiv">
+					<div id="singlenight" class="tabcontent" style="display:block">
+						<div id="singlenight-charts">
+							<div id="signal_quality" style="text-align:right;">
+								Signal Quality:
+							</div>
+							<div class="singlechart-backward-forward back-chart" style="position:block;"
+								onclick="goBackSingleNight()"></div>
+							<div class="singlechart-backward-forward forward-chart" onclick="goForwardSingleNight()">
+							</div>
 							<br />
-							<button type="button" onclick="plotBtn()" style="width:100%"> Plot</button>
+							<div id="apnea-chart"></div>
+							<hr />
+							<div id="odi-chart"></div>
+							<hr />
+							<div id="tst-chart"></div>
+							<div id="spo2below90-chart"></div>
+							<hr />
+							<div id="spo2-chart"></div>
+							<hr />
+							<div id="heartbeat-chart"></div>
+							<hr />
+							<div id="sleepstages-chart" style="margin-top:30px"></div>
+						</div>
+					</div>
+
+					<div id="comment" class="tabcontent">
+						<div class="singlechart-backward-forward back-chart" style="position:block;"
+							onclick="goBackSingleNight()"></div>
+						<div class="singlechart-backward-forward forward-chart" onclick="goForwardSingleNight()"></div>
+						<br />
+						<div id="comment-nightof" style="text-align:center; font-weight:bold;color:black;"></div>
+						<hr />
+
+						<div id="commentDiv" style="text-align:center">
+
+						</div>
+					</div>
+
+					<div id="report" class="tabcontent">
+						<div class="singlechart-backward-forward back-chart" style="position:block;"
+							onclick="goBackSingleNight()"></div>
+						<div class="singlechart-backward-forward forward-chart" onclick="goForwardSingleNight()"></div>
+						<br />
+						<div id="report-nightof" style="text-align:center; font-weight:bold;color:black;"></div>
+						<hr />
+						<div style="text-align:center; font-weight:bold;color:black;font-size:18px">Sleep Quality</div>
+
+						<div style="display:flex;  justify-content: space-between; padding:10px;">
+							<!-- <div id="report_sleepquality" style="text-align:center;border-radius: 15px;color: white;padding: 10px; background-color: green;"></div> -->
+							<div id="report_efficiency"
+								style="text-align:center;border-radius: 15px;color: white;padding: 10px; background-color: green;">
+							</div>
 						</div>
 
-						<div id="chart"></div>
 
-						<div id="generalNotesDiv" style="padding: 6px; border: 2px green solid;	margin: 4px;"></div>
+						<hr />
+						<div style="text-align:center; font-weight:bold;color:black;font-size:18px">Sleep Apnea</div>
+						<div style="display:flex;  justify-content: space-between; padding:10px;">
+							<div id="report_apnea"
+								style="text-align:center;border-radius: 15px;color: white;padding: 10px; background-color: green;">
+							</div>
+						</div>
+
+						<hr />
+						<div style="text-align:center; font-weight:bold;color:black;font-size:18px">Sleep Opportunity
+						</div>
+						<div style="display:flex; justify-content: space-between; padding:10px;">
+							<div id="report_latency"
+								style="text-align:center;border-radius: 15px;color: white;padding: 10px; background-color: green;">
+							</div>
+							<div id="report_duration"
+								style="text-align:center;border-radius: 15px;color: white;padding: 10px; background-color: green;">
+							</div>
+						</div>
+
+					</div>
+
+					<div id="trend" class="tabcontent">
+						<div style="display:flex; justify-content: space-around;">
+							<div>
+								<label for="start">From:</label> <br />
+								<input type="date" id="datestart" name="datestart" value="2018-07-22" min="2018-01-01"
+									onchange="setExteremes()" />
+							</div>
+							<div style="font-size: 55px;">
+								-
+							</div>
+							<div>
+								<label for="start">To:</label><br />
+								<input type="date" id="datefinish" name="datefinish" value="2018-07-22" min="2018-01-01"
+									onchange="setExteremes()" />
+							</div>
+						</div>
+					
+						<div id="trend-chart-tst"></div>
+						<div id="trend-chart-ahi"></div>
+						<div id="trend-chart-SpO2_Below90_Duration_Sec"></div>					
+						<div id="trend-chart-spo2"></div>						
+						<div id="trend-chart-heartrate"></div>
+						<!-- <div id="trend-chart-stages"></div> -->
+					</div>
+
+					<div id="papdata" class="tabcontent">
 					</div>
 				</div>
-
 			</div>
-		</div>
-
-		<div style="display: flex;  align-items: center;justify-content: center;">
-			<div style="color:blue; position:absolute; display:none" id="recording_time_text"> Recording Time (Hours)
-			</div>
-			<div class="backward-forward back-chart" style="top: 485px;" onclick="goBack()"></div>
-			<div class="backward-forward forward-chart" style="top: 485px;" onclick="goForward()"></div>
-			<div class="axis-seperator" style="border-bottom:1px solid gray;top: 485px; position:absolute;width: 100%;"> &nbsp;</div>
-
-			<select class="form-select axislistClass" aria-label="Default select example" id="axislist0"
-				style="top: 735px;" onchange="chooseAxis(this)">
-				<option selected>Open this select menu</option>
-				<option value="1">One</option>
-				<option value="2">Two</option>
-				<option value="3">Three</option>
-			</select>
-
-			<span class="xmin" style="top: 708px">-</span> <span class="xmax" style="top: 708px">-</span>
-			<div class="backward-forward back-chart" style="top: 735px;" onclick="goBack()"></div>
-			<div class="backward-forward forward-chart" style="top: 735px;" onclick="goForward()"></div>
-			<div class="axis-seperator" style="border-bottom:1px solid gray;top: 735px; position:absolute;width: 100%;"> &nbsp;</div>
-
-			<select class="form-select axislistClass" aria-label="Default select example" id="axislist1"
-				style="top: 960px;" onchange="chooseAxis(this)">
-				<option selected>Open this select menu</option>
-				<option value="1">One</option>
-				<option value="2">Two</option>
-				<option value="3">Three</option>
-			</select>
-
-			<span class="xmin" style="top: 940px">-</span> <span class="xmax" style="top: 940px">-</span>
-			<div class="backward-forward back-chart" style="top: 960px;" onclick="goBack()"></div>
-			<div class="backward-forward forward-chart" style="top: 960px;" onclick="goForward()"></div>
-			<div class="axis-seperator" style="border-bottom:1px solid gray;top: 960px; position:absolute;width: 100%;"> &nbsp;</div>
-
-			<select class="form-select axislistClass" aria-label="Default select example" id="axislist2"
-				style="top: 1190px;" onchange="chooseAxis(this)">
-				<option selected>Open this select menu</option>
-				<option value="1">One</option>
-				<option value="2">Two</option>
-				<option value="3">Three</option>
-			</select>
-
-			<span class="xmin" style="top: 1170px">-</span> <span class="xmax" style="top: 1170px">-</span>
-			<div class="backward-forward back-chart" style="top: 1190px;" onclick="goBack()"></div>
-			<div class="backward-forward forward-chart" style="top: 1190px;" onclick="goForward()"></div>
-			<div class="axis-seperator" style="border-bottom:1px solid gray;top: 1190px; position:absolute;width: 100%;"> &nbsp;</div>
-
-			<select class="form-select axislistClass" aria-label="Default select example" id="axislist3"
-				style="top: 1430px;" onchange="chooseAxis(this)">
-				<option selected>Open this select menu</option>
-				<option value="1">One</option>
-				<option value="2">Two</option>
-				<option value="3">Three</option>
-			</select>
-
-			<span class="xmin" style="top: 1402px">-</span> <span class="xmax" style="top: 1402px">-</span>
-			<div class="backward-forward back-chart" style="top: 1430px;" onclick="goBack()"></div>
-			<div class="backward-forward forward-chart" style="top: 1430px;" onclick="goForward()"></div>
-			<div class="axis-seperator" style="border-bottom:1px solid gray;top: 1430px; position:absolute;width: 100%;"> &nbsp;</div>
 		</div>
 	</div>
 
 
 	<button type="button" id="infoBtn" class="btn btn-primary" data-toggle="modal" data-target="#infoModel"
-	style="display:none">
-	Info
-    </button>
+		style="display:none">
+		Info
+	</button>
 
 	<div class="modal fade" id="infoModel" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
 		aria-hidden="true">
@@ -277,30 +374,39 @@
 					</button>
 				</div>
 
-				<div style="  text-align: justify;	text-justify: inter-word;color:black;     font-size: 15px;    padding: 10px;">
+				<div
+					style="  text-align: justify;	text-justify: inter-word;color:black;     font-size: 15px;    padding: 10px;">
 					<div>
-						<strong>sAHI (SleepImage's Apnea Hypopnea Index equivalent) </strong> This is an automated measure of the frequency of Apnea and Hypopnea events per hour of sleep using a set of rules that include reduction of oxygen levels. The sAHI_3% uses as part of it detection of breathing events, a reduction of the oxygen by 3%. The sAHI_4% is a less sensitive measure and requires a 4% drop in the oxygen level. These are similar but not exactly the same, as the AHI used to report a patients breathing in the sleep lab. 
+						<strong>sAHI (SleepImage's Apnea Hypopnea Index equivalent) </strong> This is an automated
+						measure of the frequency of Apnea and Hypopnea events per hour of sleep using a set of rules
+						that include reduction of oxygen levels. The sAHI_3% uses as part of it detection of breathing
+						events, a reduction of the oxygen by 3%. The sAHI_4% is a less sensitive measure and requires a
+						4% drop in the oxygen level. These are similar but not exactly the same, as the AHI used to
+						report a patients breathing in the sleep lab.
 					</div>
 
-					<hr/>
+					<hr />
 					<div>
-						<strong>Sleep Efficiency</strong> is the ratio of Total Sleep Time divided by Total Time in Bed. The ideal is > 85%.
+						<strong>Sleep Efficiency</strong> is the ratio of Total Sleep Time divided by Total Time in Bed.
+						The ideal is > 85%.
 					</div>
-					<hr/>
+					<hr />
 					<div>
 						<strong>TST_HOUR</strong> is the total sleep time in hours.
 					</div>
-					<hr/>
+					<hr />
 					<div>
-						<strong>SpO2_Below90_Percent</strong> is the percentage of total sleep time where oxygen saturation drops below 90% during the sleep period.
+						<strong>SpO2_Below90_Percent</strong> is the percentage of total sleep time where oxygen
+						saturation drops below 90% during the sleep period.
 					</div>
-					<hr/>
+					<hr />
 					<div>
-						<strong>SpO2_Below90_Duration_Min</strong> is the duration of total sleep time in Minutes where oxygen saturation drops below 90% during the sleep period.
+						<strong>SpO2_Below90_Duration_Min</strong> is the duration of total sleep time in Minutes where
+						oxygen saturation drops below 90% during the sleep period.
 					</div>
-					
 
-					
+
+
 
 
 				</div>
@@ -315,9 +421,9 @@
 	</div>
 
 	<button type="button" id="helpBtn" class="btn btn-primary" data-toggle="modal" data-target="#helpModel"
-	style="display:none">
-	Help
-    </button>
+		style="display:none">
+		Help
+	</button>
 
 	<div class="modal fade" id="helpModel" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
 		aria-hidden="true">
@@ -331,15 +437,19 @@
 					</button>
 				</div>
 
-				<div style="  text-align: justify;	text-justify: inter-word;color:black;     font-size: 15px;    padding: 10px;">
-					If you have any questions or need assistance with the tracker application, please send an email to Support@Resttech.pro. Please do not reach out to the clinical staff for technical support.					
+				<div
+					style="  text-align: justify;	text-justify: inter-word;color:black;     font-size: 15px;    padding: 10px;">
+					If you have any questions or need assistance with the tracker application, please send an email to
+					Support@Resttech.pro. Please do not reach out to the clinical staff for technical support.
 
 
 				</div>
 
 				<div class="modal-footer" style="    justify-content: center; display:flex">
-					<button type="button" class="btn btn-primary" >
-						<a style="color:white; font-weight: bold;" href="mailto:Support@resttech.pro?subject=Email from RestTracker APP">Email Support</a></button> 
+					<button type="button" class="btn btn-primary">
+						<a style="color:white; font-weight: bold;"
+							href="mailto:Support@resttech.pro?subject=Email from RestTracker APP">Email
+							Support</a></button>
 					<!-- <button type="button" class="btn btn-secondary" data-dismiss="modal"><a href="/public/html/settings.html"> OK</a></button> -->
 					<!-- <a href="https://csmaapp.azurewebsites.net/" target="_blank" rel="noopener"><button type="button" class="btn btn-primary" onclick='document.getElementById("closeAppUpdate").click()'>Update new app</button></a>  -->
 				</div>

@@ -1,31 +1,10 @@
 'use strict';
-var chart;
+let trendchart_stages, trendchart_tst, trendchart_spo2, trendchart_heartrate, trendchart_ahi, trendchart_spo2_below90;
 var REST_DATA = {};
 // chart.exportChart({
 //     type: 'application/pdf',
 //     filename: 'my-pdf'
 // });
-
-const chartHeight = 1810;
-const sleepDataAxisHeight = 160; // 20%
-const top2ndSleepAxis = 300;  // 30%
-const topComment = 1260;
-const topDSAaxis = 1630; // 77%
-const topDSA2axis = 1630; //77%
-const DSAHeight = 150;  // 10%
-const topPAP = 731;  // 88%
-const papHeight = 94;
-const topRecoringTime = 100;  // 101%
-const topxAxis = 96;
-const topNav = 0;
-let formatPos = 0;
-var mouseTracking = false;
-var yAxisReversed, yAxisVisible, yAxisColor = {};
-var cloneToolTip = null, cloneToolTip2 = null;
-
-
-const nonSleepAxisName = ['Medication Changes', 'CPAP', 'General Notes', 'Dental Appliance',
-    'Inspire Changes', 'SSS', 'SS', 'RT', 'Navigator 1'];
 
 Highcharts.SVGRenderer.prototype.symbols.plus = function (x, y, w, h) {
     return ['M', x, y + h / 2, 'L', x + w, y + h / 2, 'M', x + w / 2, y, 'L', x + w / 2, y + h, 'z'];
@@ -42,115 +21,679 @@ if (Highcharts.VMLRenderer) {
 }
 
 $(async function () {
-    REST_DATA.axis = []
-    REST_DATA.axis[0] = {}
-    REST_DATA.axis[1] = {}
-    REST_DATA.axis[2] = {}
-    REST_DATA.axis[3] = {}
-
-    REST_DATA.axis[0].name = localStorage.getItem("axis0") || "sAHI_4%";
-    REST_DATA.axis[1].name = localStorage.getItem("axis1") || "SpO2_Below90_Duration_Min";
-    REST_DATA.axis[2].name = localStorage.getItem("axis2") || "TST_Hour";
-    REST_DATA.axis[3].name = localStorage.getItem("axis3") || "Sleep_Efficiency";
-
-    REST_DATA.axis[0].reversed = true;
-    REST_DATA.axis[1].reversed = true;
-
-    const profileString = localStorage.getItem("rest-tracker-app-profile")
-
-    if (profileString == null)
-     {
-        alert("Error: Your profile is not onboarded. Please contact support!")        
+    const profileString = localStorage.getItem("rest-tracker-app-profile")    
+    if (profileString == null) {
+        alert("Error: You are not onboarded. Please contact support!")
     } else {
         REST_DATA.subject = JSON.parse(profileString)
 
+        if (REST_DATA.subject.ringorpap == "pap") {
+            
+        }
         if (REST_DATA.subject.ring_id && REST_DATA.subject.ring_id.length > 0) {
             REST_DATA.selectedPatId = REST_DATA.subject.ring_id
-            cmdPlot()
+            plotChart()
         } else {
             alert(`Error : Tell support that your ring id is ${REST_DATA.subject.ring_id}`)
         }
     }
-   
 
-    fetch('/getPatList').then(response => response.json())
-        .then(data => {
-            data = data.map(e => e.ring_id).sort();
-            let select = "";
-            for (const d of data) {
-                select = select + `<option value="${d}">${d}</option>`
-            }
-            document.getElementById("patIdList").innerHTML = select
-        });
+    document.getElementById("datestart").value = moment(new Date()).subtract(1, "month").format("YYYY-MM-DD")
+    document.getElementById("datefinish").value = moment(new Date()).format("YYYY-MM-DD")
 });
 
-function plotBtn() {
-    REST_DATA.selectedPatId = document.getElementById("patIdList").value;
-    cmdPlot();
-}
-
-
-function cmdPlot() {
-    plotChart(REST_DATA.selectedPatId)
-}
-
-async function plotChart(patId) {
-    REST_DATA.selectedPatId = patId
+async function plotChart() {
     REST_DATA.selectedCsvData = await getCsvData(REST_DATA.selectedPatId)
+    singleNight = REST_DATA.selectedCsvData.length - 1;
+    const mostRecentData = REST_DATA.selectedCsvData[singleNight];
+    drawsingleNightCharts(mostRecentData);
+    let sleepData = {};
 
-    let axis1 = [], axis2 = [], axis3 = [], axis4 = [], axis5 = [], axis6 = [], axis7 = [], axis8 = [], recording_time = [];
-    let excluded = 0;
+    sleepData.tst = []; sleepData.recording_time = [];
+    sleepData.sAHI_3 = []; sleepData.sAHI_4 = []
+    sleepData.Min_SpO2 = []; sleepData.Max_SpO2 = []; sleepData.Mean_SpO2 = [];
+    sleepData.Mean_Heart_Rate_BPM = []; sleepData.Min_Heart_Rate_BPM = []; sleepData.Max_Heart_Rate_BPM = [];
+    sleepData.Sleep_Efficiency = [];
+    sleepData.SpO2_Below90_Duration_Sec = [];
+    sleepData.REM_Duration_Hour = []; sleepData.Unstable_Duration_Hour = []; sleepData.Stable_Duration_Hour = [];
+
     for (const d of REST_DATA.selectedCsvData) {
         const sleepdataJson = JSON.parse(d.sleepdata)
-        if (sleepdataJson['Recording_Time'] < Number($("#recTime").val())) {
-            excluded++;
-            //  if (whichAxis == "Recording_Time") dataArr.push([d.Plot_Date, d["Recording_Time"]]);
-        } else {
-            axis1.push([d.plot_date, sleepdataJson[REST_DATA.axis[0].name]]);
-            axis2.push([d.plot_date, sleepdataJson[REST_DATA.axis[1].name]]);
-            axis3.push([d.plot_date, sleepdataJson[REST_DATA.axis[2].name]]);
-            axis4.push([d.plot_date, sleepdataJson[REST_DATA.axis[3].name]]);
-            // axis5.push([d.plot_date, sleepdataJson[REST_DATA.axisname[5]]);
-            // axis6.push([d.plot_date, sleepdataJson[REST_DATA.axisname[6]]);
-            // axis7.push([d.plot_date, sleepdataJson[REST_DATA.axisname[7]]);
-            // axis8.push([d.plot_date, sleepdataJson[REST_DATA.axisname[8]]);
+
+        d.plot_date = (sleepdataJson.Start_Time.indexOf("PM") > -1) ?
+            moment(sleepdataJson.Start_Date).add(1, 'days') - 1 : new Date(sleepdataJson.Start_Date).setHours(0, 0, 0, 0) - 1
+
+        if (sleepData.recording_time.length > 0) {
+            for (let i = sleepData.recording_time[sleepData.recording_time.length - 1][0]; i < (d.plot_date - 86400000); i = i + 86400000) {
+                sleepData.recording_time.push(
+                    {
+                        x: i + 86400000,
+                        y: 0,
+                        color: "red",
+                        //    marker:{
+                        //      radius: 3
+                        //    }
+                    })
+                // recording_time.push([i+ 86400000, 0]);    
+            }
+
+            for (let i = sleepData.tst[sleepData.tst.length - 1][0]; i < (d.plot_date - 86400000); i = i + 86400000) {
+                sleepData.tst.push(
+                    {
+                        x: i + 86400000,
+                        y: 0,
+                        color: "red",
+                        //    marker:{
+                        //      radius: 3
+                        //    }
+                    })
+                // recording_time.push([i+ 86400000, 0]);    
+            }
         }
-        recording_time.push([d.plot_date, sleepdataJson["Recording_Time"]]);
+
+        sleepData.tst.push([d.plot_date, sleepdataJson.TST_Hour]);
+        sleepData.recording_time.push([d.plot_date, sleepdataJson["Recording_Time"]]);
+
+        sleepData.SpO2_Below90_Duration_Sec.push([d.plot_date, sleepdataJson.SpO2_Below90_Duration_Sec]);
+
+        sleepData.sAHI_3.push([d.plot_date, sleepdataJson["sAHI_3%"]]);
+        sleepData.sAHI_4.push([d.plot_date, sleepdataJson["sAHI_4%"]]);
+
+        sleepData.Min_SpO2.push([d.plot_date, sleepdataJson["Min_SpO2"]]);
+        sleepData.Max_SpO2.push([d.plot_date, sleepdataJson["Max_SpO2"]]);
+        sleepData.Mean_SpO2.push([d.plot_date, sleepdataJson["Mean_SpO2"]]);
+
+        sleepData.Mean_Heart_Rate_BPM.push([d.plot_date, sleepdataJson["Mean_Heart_Rate_BPM"]]);
+        sleepData.Min_Heart_Rate_BPM.push([d.plot_date, sleepdataJson["Min_Heart_Rate_BPM"]]);
+        sleepData.Max_Heart_Rate_BPM.push([d.plot_date, sleepdataJson["Max_Heart_Rate_BPM"]]);
+        sleepData.Sleep_Efficiency.push([d.plot_date, sleepdataJson["Sleep_Efficiency"]]);
+
+        sleepData.REM_Duration_Hour.push([d.plot_date, sleepdataJson["REM_Duration_Hour"]]);
+        sleepData.Unstable_Duration_Hour.push([d.plot_date, sleepdataJson["Unstable_Duration_Hour"]]);
+        sleepData.Stable_Duration_Hour.push([d.plot_date, sleepdataJson["Stable_Duration_Hour"]]);
     }
 
-    //  const ringUser = REST_DATA.patientList.filter(e => e.ring_id == REST_DATA.selectedPatId);
-    if (REST_DATA.selectedCsvData) {
-        createChart([axis1, axis2, axis3, axis4])
-        plotAppData(REST_DATA.selectedPatId, recording_time)
-        // plotChart(REST_DATA.selectedPatId);
+    let cpap = [], min_pressure = [], max_pressure = [];
+
+    REST_DATA.papData = {};
+    REST_DATA.papData['pAHI'] = [];
+    REST_DATA.papData['pUsage'] = [];
+    REST_DATA.papData['pLeak'] = [];
+    REST_DATA.papData['pLeak_95th'] = [];
+    REST_DATA.papData['pLeak_max'] = [];
+
+    const sqlPapresponse = await fetch(`/getpapdata?tracker_id=${REST_DATA.selectedPatId}`)
+    const sqlPapdata = await sqlPapresponse.json()
+
+    for (let p of sqlPapdata) {
+        let d = Date.parse(moment(p.date).add(1, "days")) - 1;
+
+        const r = JSON.parse(p.report)
+
+        if (p.report_type == "cpap") {
+            if (p.erp_level == 0) p.erp_level = 0.3;
+            r.setpressure = Number(r.setpressure);
+
+            cpap.push({
+                x: d, low: r.setpressure - r.erp_level, high: r.setpressure, report_type: p.report_type,
+                erp_level: r.erp_level, machine: p.machine, mode: p.mode, serial: p.serial_number, ahi: p.ahi, usage: p.pap_usage
+            });
+
+        } else if (p.report_type == "bilevel") {
+            if (r.epap == r.ipap) r.epap = r.epap - 0.3;
+            cpap.push({
+                x: d, low: r.epap, high: r.ipap, report_type: p.report_type,
+                machine: p.machine, mode: p.mode, serial: p.serial_number, ahi: p.ahi, usage: p.pap_usage
+            });
+
+        } else if (p.report_type == "apap") {
+            if (r.erp_level == 0) r.erp_level = 0.3;
+            cpap.push({
+                x: d, low: r.ninetyfive - r.erp_level, high: r.ninetyfive, report_type: p.report_type,
+                erp_level: r.erp_level, machine: p.machine, mode: p.mode, serial: p.serial_number, ahi: p.ahi, usage: p.pap_usage,
+                min_pressure: r.min_pressure, max_pressure: r.max_pressure
+            });
+
+            min_pressure.push([d, r.min_pressure])
+            max_pressure.push([d, r.max_pressure]);
+        }
+
+        if (REST_DATA.papData['pUsage'].length > 0) {
+            for (let i = REST_DATA.papData['pUsage'][REST_DATA.papData['pUsage'].length - 1][0]; i < (d - 86400000); i = i + 86400000) {
+                REST_DATA.papData['pUsage'].push(
+                    {
+                        x: i + 86400000,
+                        y: 0,
+                        color: "red",
+                        // marker:{
+                        //   radius: 3
+                        // }
+                    })
+            }
+        }
+        REST_DATA.papData['pAHI'].push([d, p.ahi]);
+        REST_DATA.papData['pUsage'].push([d, p.pap_usage]);
+        REST_DATA.papData['pLeak'].push([d, p.leaks || 0]);
+        REST_DATA.papData['pLeak_95th'].push([d, p.leaks_95th || 0]);
+        REST_DATA.papData['pLeak_max'].push([d, p.leaks_max || 0]);
+    }
+
+    let tstPapData = []
+    if (REST_DATA.papData['pUsage'].length > 0) {
+        tstPapData = [{
+            color: 'black',
+            name: 'Ring Usage',
+            data: sleepData.recording_time
+        }, {
+            name: 'PAP Usage',
+            color: 'red',
+            data: REST_DATA.papData['pUsage']
+        }]
     } else {
-        console.log("No Sleep data for selected user")
+        tstPapData = [{
+            color: 'darkblue',
+            name: 'Recording time',
+            data: sleepData.recording_time
+        }, {
+            color: 'green',
+            name: 'Total sleep time',
+            data: sleepData.tst
+        }]
     }
 
-    // $("#information").html("<b>Excluded records :</b> " + excluded + " records have recording times < " + $("#recTime").val());
+    trendchart_tst = Highcharts.chart('trend-chart-tst', {
+        chart: {
+            type: 'spline',
+        },
+        legend: {
+            itemStyle: {
+                fontSize: '15px',
+            }
+        },
+        title: {
+            text: '',
+            align: 'left'
+        },
+        subtitle: {
+            text: '',
+            align: 'left'
+        },
+        xAxis: {
+            type: "datetime",
+            events: {
+                afterSetExtremes: function (e) {
+                    const rc = e.target.series[0].data.filter(d => d.x >= e.min && d.x <= e.max && d.y != 0).map(d => d.y)
+                    const tst = e.target.series[1].data.filter(d => d.x >= e.min && d.x <= e.max && d.y != 0).map(d => d.y)
+
+                    // if (e.target.series[2]) {
+                    //     papusage= e.target.series[2].data.filter(d => d.x >= e.min && d.x <= e.max && d.y != 0).map(d => d.y)
+                    // }                    
+
+                    // const papusage_average = Math.round(papusage.reduce(function (sum, value) {
+                    //     return sum + value;
+                    // }, 0) / rc.length);
+
+                    const rc_average = Math.round(rc.reduce(function (sum, value) {
+                        return sum + value;
+                    }, 0) / rc.length);
+
+                    const tst_average = Math.round(tst.reduce(function (sum, value) {
+                        return sum + value;
+                    }, 0) / tst.length);
+
+                    if (REST_DATA.papData['pUsage'].length > 0) {
+                        trendchart_tst.legend.allItems[0].name = `Ring Usage (Avg: ${rc_average})`
+                        trendchart_tst.legend.allItems[1].name = `Pap Usage (Avg: ${tst_average})`
+                    } else {
+                        trendchart_tst.legend.allItems[0].name = `Recording Time (Avg: ${rc_average})`
+                        trendchart_tst.legend.allItems[1].name = `Total sleep time (Avg: ${tst_average})`
+                    }
+
+                    // trendchart_tst.legend.allItems[2].name = `Total sleep time (Avg: ${tst_average})`
+                    trendchart_tst.legend.update();
+                }
+            }
+        },
+        yAxis: {
+            tickPositions: [0, 2, 4, 6, 8, 10],
+            showFirstLabel: false,
+            title: {
+                useHTML: true,
+                text: ''
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        tooltip: {
+            shared: true,
+            headerFormat: `<b>{point.x:%A, %b %e %Y}</b><br/>`,
+            //  pointFormat: '<span style="font-size:16px"> <b>{point.y} ({point.percentage:.1f}%)</b></span>'            
+        },
+        plotOptions: {
+            series: {
+                marker: {
+                    enabled: true,
+                }
+            }
+        },
+        series: tstPapData
+    });
+
+    let ahiPapData = []
+    if (REST_DATA.papData['pAHI'].length > 0) {
+        ahiPapData = [{
+            color: 'blue',
+            name: 'AHI 3%',
+            data: sleepData.sAHI_3
+        }, {
+            color: 'black',
+            name: 'AHI 4%',
+            data: sleepData.sAHI_4
+        }, {
+            color: 'red',
+            name: 'PAP AHI',
+            data: REST_DATA.papData['pAHI']
+        }]
+    } else {
+        ahiPapData = [{
+            color: 'blue',
+            name: 'AHI 3%',
+            data: sleepData.sAHI_3
+        }, {
+            color: 'black',
+            name: 'AHI 4%',
+            data: sleepData.sAHI_4
+        }]
+    }
+
+
+    trendchart_ahi = Highcharts.chart('trend-chart-ahi', {
+        chart: {
+            type: 'spline',
+        },
+        title: {
+            text: '',
+            align: 'left'
+        }, legend: {
+            itemStyle: {
+                fontSize: '15px',
+            }
+        },
+        subtitle: {
+            text: '',
+            align: 'left'
+        },
+        xAxis: {
+            type: "datetime",
+            events: {
+                afterSetExtremes: function (e) {
+                    const ahi_3 = e.target.series[0].data.filter(d => d.x >= e.min && d.x <= e.max).map(d => d.y)
+                    const ahi_4 = e.target.series[1].data.filter(d => d.x >= e.min && d.x <= e.max).map(d => d.y)
+                    const ahi_3_average = Math.round(ahi_3.reduce(function (sum, value) {
+                        return sum + value;
+                    }, 0) / ahi_3.length);
+
+                    const ahi_4_average = Math.round(ahi_4.reduce(function (sum, value) {
+                        return sum + value;
+                    }, 0) / ahi_4.length);
+
+                    trendchart_ahi.legend.allItems[0].name = `AHI 3% (Avg: ${ahi_3_average})`
+                    trendchart_ahi.legend.allItems[1].name = `AHI 4% (Avg: ${ahi_4_average})`
+                    trendchart_ahi.legend.update();
+                }
+            }
+        },
+        yAxis: {
+            tickPositions: [0, 5, 15, 30, 45],
+            showFirstLabel: false,
+            plotBands: [{
+                color: 'lightgreen',
+                from: 0,
+                to: 5
+            }, {
+                color: 'yellow',
+                from: 5,
+                to: 15
+            }, {
+                color: 'orange',
+                from: 15,
+                to: 30
+            }, {
+                color: '#FF474D',
+                from: 30,
+                to: 45
+            }],
+            title: {
+                useHTML: true,
+                text: ''
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        tooltip: {
+            shared: true,
+            headerFormat: `<b>{point.x:%A, %b %e %Y}</b><br/>`,
+        },
+        plotOptions: {
+            series: {
+                marker: {
+                    enabled: false,
+                }
+            }
+        },
+        series: ahiPapData
+    });
+
+    // {
+    //     type: 'pie',
+    //     name: 'Total',
+    //     data: [{
+    //         name: '2020',
+    //         y: 619,
+    //         color: Highcharts.getOptions().colors[0], // 2020 color
+    //         dataLabels: {
+    //             enabled: true,
+    //             distance: -50,
+    //             format: '{point.total} M',
+    //             style: {
+    //                 fontSize: '15px'
+    //             }
+    //         }
+    //     }, {
+    //         name: '2021',
+    //         y: 386,
+    //         color: Highcharts.getOptions().colors[1] // 2021 color
+    //     }],
+    //     center: [110, 28],
+    //     size: 100,
+    //     innerSize: '70%',
+    //     showInLegend: false,
+    //     dataLabels: {
+    //         enabled: false
+    //     }
+    // },
+
+    trendchart_spo2 = Highcharts.chart('trend-chart-spo2', {
+        chart: {
+            type: 'spline',
+        },
+        legend: {
+            itemStyle: {
+                fontSize: '15px',
+            }
+        },
+        title: {
+            text: '',
+            align: 'left'
+        },
+        subtitle: {
+            text: '',
+            align: 'left'
+        },
+        xAxis: {
+            type: "datetime",
+        },
+        yAxis: {
+            min: 70, max: 100,
+            showFirstLabel: false,
+            title: {
+                useHTML: true,
+                text: ''
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        tooltip: {
+            shared: true,
+            headerFormat: `<b>{point.x:%A, %b %e %Y}</b><br/>`,
+        },
+        plotOptions: {
+            series: {
+                marker: {
+                    enabled: false,
+                }
+            }
+        },
+        series: [{
+            name: 'Max Spo2',
+            data: sleepData.Max_SpO2
+        }, {
+            name: 'Mean Spo2',
+            data: sleepData.Mean_SpO2
+        }, {
+            name: 'Min Spo2',
+            data: sleepData.Min_SpO2
+        }]
+    });
+
+    trendchart_spo2_below90 = Highcharts.chart('trend-chart-SpO2_Below90_Duration_Sec', {
+        chart: {
+            type: 'spline',
+            height: 300
+        },
+        legend: {
+            itemStyle: {
+                fontSize: '15px',
+            }
+        },
+        title: {
+            text: '',
+            align: 'left'
+        },
+        subtitle: {
+            text: '',
+            align: 'left'
+        },
+        xAxis: {
+            type: "datetime",
+        },
+        yAxis: {
+
+            showFirstLabel: false,
+            title: {
+                useHTML: true,
+                text: ''
+            },
+        },
+        credits: {
+            enabled: false
+        },
+        tooltip: {
+            shared: true,
+            headerFormat: `<b>{point.x:%A, %b %e %Y}</b><br/>`,
+        },
+        plotOptions: {
+            series: {
+                marker: {
+                    enabled: false,
+                }
+            }
+        },
+        series: [{
+            name: 'SpO2_Below90_Duration',
+            data: sleepData.SpO2_Below90_Duration_Sec,
+            tooltip: {
+                pointFormatter: function () {
+                    const m = Math.floor(this.y / 60);
+                    const s = this.y - m * 60;
+                    return `${m}:${s} (mins:sec)`
+                }
+            }
+        }]
+    });
+
+    trendchart_heartrate = Highcharts.chart('trend-chart-heartrate', {
+        chart: {
+            type: 'spline',
+        },
+        legend: {
+            itemStyle: {
+                fontSize: '15px',
+            }
+        },
+        title: {
+            text: '',
+            align: 'left'
+        },
+        subtitle: {
+            text: '',
+            align: 'left'
+        },
+        xAxis: {
+            type: "datetime",
+            events: {
+                afterSetExtremes: function (e) {
+                    const mean_heartrate = e.target.series[1].data.filter(d => d.x >= e.min && d.x <= e.max).map(d => d.y)
+                    const mean_heartrate_average = Math.round(mean_heartrate.reduce(function (sum, value) {
+                        return sum + value;
+                    }, 0) / mean_heartrate.length);
+
+                    trendchart_heartrate.legend.allItems[1].name = `Mean Heartrate (Avg: ${mean_heartrate_average})`
+                    trendchart_heartrate.legend.update();
+                }
+            }
+        },
+        yAxis: {
+            showFirstLabel: false,
+            title: {
+                useHTML: true,
+                text: ''
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        tooltip: {
+            shared: true,
+            headerFormat: `<b>{point.x:%A, %b %e %Y}</b><br/>`,
+        },
+        plotOptions: {
+            series: {
+                marker: {
+                    enabled: false,
+                }
+            }
+        },
+        series: [{
+            name: 'Max Heartrate',
+            data: sleepData.Max_Heart_Rate_BPM
+        }, {
+            name: 'Mean Heartrate',
+            data: sleepData.Mean_Heart_Rate_BPM
+        }, {
+            name: 'Min Heartrate',
+            data: sleepData.Min_Heart_Rate_BPM
+        }]
+    });
+
+    // trendchart_stages = Highcharts.chart('trend-chart-stages', {
+    //     chart: {
+    //         type: 'area',
+    //     },
+    //     legend: {
+    //         itemStyle: {
+    //             fontSize: '15px',
+    //         }
+    //     },
+    //     title: {
+    //         text: '',
+    //         align: 'left'
+    //     },
+    //     subtitle: {
+    //         text: '',
+    //         align: 'left'
+    //     },
+    //     xAxis: {
+    //         type: "datetime",
+    //     },
+    //     yAxis: {
+    //         tickPositions: [0, 2, 4, 6, 8],
+    //         showFirstLabel: false,
+    //         title: {
+    //             useHTML: true,
+    //             text: ''
+    //         }
+    //     },
+    //     credits: {
+    //         enabled: false
+    //     },
+    //     tooltip: {
+    //         shared: true,
+    //         headerFormat: `<b>{point.x:%A, %b %e %Y}</b><br/>`,
+    //     },
+    //     plotOptions: {
+    //         area: {
+    //             stacking: 'normal',
+    //             lineColor: '#666666',
+    //             lineWidth: 1,
+    //             marker: {
+    //                 enabled: false,
+    //                 lineWidth: 1,
+    //                 lineColor: '#666666'
+    //             }
+    //         }
+    //     },
+    //     series: [{
+    //         type: 'area',
+    //         color: 'darkblue',
+    //         name: 'Deep sleep',
+    //         data: sleepData.Stable_Duration_Hour
+    //     }, {
+    //         type: "area",
+    //         color: 'orange',
+    //         name: 'Light Sleep',
+    //         data: sleepData.Unstable_Duration_Hour
+
+    //     }, {
+    //         type: "areaspline",
+    //         color: 'lightgreen',
+    //         name: 'REM',
+    //         data: sleepData.REM_Duration_Hour
+    //     }]
+    // });
+
+
+    setExteremes()
+
 }
 
-function createChart(axisDataChart) {
-    let i = 0, k = 0, yAxisColors = ['#000000', '#0000ff', '#009933', Highcharts.getOptions().colors[5], '#000000', '#0000ff', '#009933', Highcharts.getOptions().colors[5]];
-    //'#993300', '#000000', '#004d00' , '#990099'];
+function setExteremes() {
+    trendchart_tst.xAxis[0].setExtremes(moment(document.getElementById("datestart").value, "YYYY-MM-DD").add(1, 'days') - 1, moment(document.getElementById("datefinish").value, "YYYY-MM-DD").add(1, 'days') - 1)
+  //  trendchart_stages.xAxis[0].setExtremes(moment(document.getElementById("datestart").value, "YYYY-MM-DD").add(1, 'days') - 1, moment(document.getElementById("datefinish").value, "YYYY-MM-DD").add(1, 'days') - 1)
+    trendchart_spo2.xAxis[0].setExtremes(moment(document.getElementById("datestart").value, "YYYY-MM-DD").add(1, 'days') - 1, moment(document.getElementById("datefinish").value, "YYYY-MM-DD").add(1, 'days') - 1)
+    trendchart_spo2_below90.xAxis[0].setExtremes(moment(document.getElementById("datestart").value, "YYYY-MM-DD").add(1, 'days') - 1, moment(document.getElementById("datefinish").value, "YYYY-MM-DD").add(1, 'days') - 1)
+    trendchart_heartrate.xAxis[0].setExtremes(moment(document.getElementById("datestart").value, "YYYY-MM-DD").add(1, 'days') - 1, moment(document.getElementById("datefinish").value, "YYYY-MM-DD").add(1, 'days') - 1)
+    trendchart_ahi.xAxis[0].setExtremes(moment(document.getElementById("datestart").value, "YYYY-MM-DD").add(1, 'days') - 1, moment(document.getElementById("datefinish").value, "YYYY-MM-DD").add(1, 'days') - 1)
+}
 
-    // let oExportMenu = Highcharts.getOptions().exporting.buttons.contextButton.menuItems, exportMenu = oExportMenu.slice(0, 1);
+
+function createChart() {
+    let i = 0, k = 0, yAxisColors = ['#000000', '#0000ff', '#009933', Highcharts.getOptions().colors[5], '#000000', '#0000ff', '#009933', Highcharts.getOptions().colors[5]];
+
+    let oExportMenu = Highcharts.getOptions().exporting.buttons.contextButton.menuItems, exportMenu = []
+
+    exportMenu.push(
+        {
+            "text": '<span style="color:blue">Parameter Definition</span>', onclick: function () { document.getElementById("infoBtn").click() }
+        },
+        {
+            "text": '<span style="color:blue">Help</span>',
+            onclick: function () { document.getElementById("helpBtn").click() }
+        })
+
+    exportMenu = exportMenu.concat(oExportMenu.slice(7, 10));
+
+
     //  exportMenu.push({ text: "VIEW INFO", onclick: downloadFullReportOriginal });
     //  exportMenu.push({ text: "CONTACT SUPPORT", onclick: downloadFullReportOriginal });
     //exportMenu.push({ text: "Download Report (PDF)", onclick: downloadFullReportOriginal });
 
-    let commentSeriesShortName = { 0: 'M', 1: 'P', 2: 'G', 3: 'D', 4: 'I', 5: "E", 6: 'clinic' };
-    let commentSeriesShape = { 0: 'diamond', 1: 'square', 2: 'triangle', 3: 'triangle-down', 4: 'circle', 5: 'event', 6: 'plus' };
-    let commentSeriesName = { 0: 'Medication Changes', 1: 'CPAP', 2: 'General Notes', 3: 'Dental Appliance', 4: 'Inspire Changes', 5: 'event', 6: 'clinic' };
-    let seriesNameArr = Object.values(commentSeriesName);
-    let chartTitle = `${REST_DATA.subject.firstname} ${REST_DATA.subject.lastname} , DOB: ${moment(REST_DATA.subject.dob).format("MM/DD/YYYY")}`;
-    chartTitle = chartTitle + " (Id: " + REST_DATA.selectedPatId + ")";;
-    chartTitle = ""
-
     var initChart = {
         chart: {
             height: chartHeight,
-            //  width: 300,
             type: 'spline',
             inverted: false,
             animation: false,
@@ -158,62 +701,8 @@ function createChart(axisDataChart) {
             panning: false,
             //  zoomType: 'x',
             // marginTop: 40,
-            events: {
-                render: function () {
-                    // arrangeLegends();
-                },
-                redraw: function (e) {
-                    //arrangeLegends();
-                },
-
-                click: function (e) {
-                    return;
-                    if (document.getElementById("mouseTrackerSleep").checked) {
-                        if (cloneToolTip) {
-                            if (chart.container.firstChild.contains(cloneToolTip))
-                                chart.container.firstChild.removeChild(cloneToolTip);
-                        }
-                        if (cloneToolTip2) {
-                            cloneToolTip2.remove();
-                        }
-                        cloneToolTip = this.tooltip.label.element.cloneNode(true);
-                        chart.container.firstChild.appendChild(cloneToolTip);
-
-                        cloneToolTip2 = $('.highcharts-tooltip').clone();
-                        $(chart.container).append(cloneToolTip2);
-
-                    }
-                    return;
-                    var series = this.series;
-
-                    for (var i = 0; i < series.length; i++) {
-                        if (series[i].name.indexOf('Navigator') > -1) continue;
-                        series[i].options.enableMouseTracking = !mouseTracking;
-                        series[i].checkbox.checked = !mouseTracking;
-                    }
-                    mouseTracking = !mouseTracking;
-                    // console.log(
-                    //     Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', e.xAxis[0].value),
-                    //     e.yAxis[0].value
-                    // )
-                },
-                load: function () {
-
-
-
-                }
-            }
         },
         plotOptions: {
-            // line: {
-            //     stacking: 'normal'
-            // },
-            // spline: {
-            //     stacking: 'normal'
-            // },
-            // errorbar: {
-            //     grouping: false
-            // },
             columnrange: {
                 dataLabels: {
                     enabled: false,
@@ -254,79 +743,27 @@ function createChart(axisDataChart) {
                     },
                     show: toggleAxisExtremes,
                     hide: toggleAxisExtremes,
-                    // mouseOver: function (e) {
-                    //     let elem = document.querySelector('.highcharts-tooltip > div.highcharts-label.highcharts-tooltip-header.highcharts-tooltip-box > span > span');
-                    //     if (elem && elem.innerHTML.indexOf(":") > -1) {
-                    //         setTimeout(() => {
-                    //             let elem = document.querySelector('.highcharts-tooltip > div.highcharts-label.highcharts-tooltip-header.highcharts-tooltip-box > span > span');
-                    //             elem.innerHTML = elem.innerHTML.substring(0, elem.innerHTML.indexOf(":")-2)
-                    //         }, 2);
-                    //     }
-                    // }
                 }
             }
         },
-        // drilldown: {
-        //     animation: {
-        //         duration: 0
-        //     }
-        // },
         legend: {
-            //symbolWidth: 4,
-            //borderWidth:8,
-            // itemWidth: 8,
             symbolHeight: 10,
             itemMarginTop: 2,
             itemStyle: {
                 fontWeight: 'bold',
                 fontSize: '13px'
             },
-            itemEvents: {
-                dblclick: function () {
-                    var seriesIndex = this.index;
-                    var series = this.chart.series;
-                    if (this.visible && this.chart.restIsHidden) {
-                        for (var i = 0; i < series.length; i++) {
-                            if (series[i].index != seriesIndex) {
-                                series[i].show();
-                            }
-                        }
-                        this.chart.restIsHidden = false;
-                    } else {
-                        for (var i = 0; i < series.length; i++) {
-
-                            if (series[i].index != seriesIndex &&
-                                !seriesNameArr.includes(series[i].name) &&
-                                series[i].name != "SS" && series[i].name != "SSS"
-                                && series[i].name != "RT") {
-                                series[i].hide();
-                            }
-                        }
-                        this.show();
-                        this.chart.restIsHidden = true;
-                    }
-                    return false;
-                },
-                click: function () {
-                    // alert('click')
-                }
-            },
             //     y: topLegend,
             // top:600,
             enabled: false
         },
-        // title: {
-        //     text: (document.getElementById("chAnonymous").checked) ?
-        //         ' Anonymous ' : chartTitle
-        // },
         subtitle: {
-            text: chartTitle
+            text: 'test'
         },
         credits: {
             enabled: false
         },
         scrollbar: {
-            // dont call setExtremes with each move of the scrollbar
             liveRedraw: false
         },
         tooltip: {
@@ -340,50 +777,10 @@ function createChart(axisDataChart) {
                 whiteSpace: 'normal',
                 fontSize: '15px'
             },
-            // positioner: function (width, height, point) {
-
-            //     let position;
-
-            //     if (point.isHeader) {
-            //         formatPos = 0;
-            //         position = {
-            //             x: point.plotX,
-            //             y: 200,
-            //         };
-            //     } else {
-            //         let hoverpoints = this.chart.hoverPoints;
-            //         if (hoverpoints.length < 5) {
-            //             return {
-            //                 x: point.plotX,
-            //                 y: point.plotY,
-            //             };
-            //         }
-            //         formatPos++;
-            //         let yPos = chart.yAxis[formatPos - 1].toPixels((chart.yAxis[formatPos - 1].min + chart.yAxis[formatPos - 1].max) / 2)
-
-            //         if (formatPos == hoverpoints.length) {
-            //             yPos = point.plotY
-            //         } else if (formatPos > 4) {
-            //             let i = 0;
-            //             while (!chart.yAxis[formatPos + i - 1].dataMin) {
-            //                 i++
-            //             }
-            //             yPos = chart.yAxis[formatPos + i - 1].toPixels(chart.yAxis[formatPos + i - 1].dataMin) - 50
-            //         }
-
-            //         position = {
-            //             x: point.plotX,
-            //             y: yPos,
-            //         };
-            //     }
-
-            //     return position;
-            // },
         },
         series: [],
         xAxis: {
-            //  ordinal: false,
-            top: topxAxis,
+            // top: topxAxis,
             type: 'datetime',
             minorTicks: true,
             minorTickInterval: 4 * 3600 * 1000,
@@ -391,7 +788,7 @@ function createChart(axisDataChart) {
             // tickInterval:3600 * 1000,
             events: {
 
-                afterSetExtremes:  (e) => {            
+                afterSetExtremes: (e) => {
 
                     document.querySelectorAll(".xmin").forEach(e => {
                         e.innerHTML = moment(chart.xAxis[0].min).format("MMM DD");
@@ -403,36 +800,21 @@ function createChart(axisDataChart) {
                         e.style.left = `${chart.xAxis[0].toPixels(chart.xAxis[0].max)}px`
                     })
 
-                    // Get the currently selected range from RangeSelector in Highstock
-                    // if(typeof(e.rangeSelectorButton)!== 'undefined')
-                    // {
-                    //   console.log('count: '+e.rangeSelectorButton.count + 'text: ' +e.rangeSelectorButton.text + ' type:' + e.rangeSelectorButton.type);
-                    // }                   
-
-                    // RESET AVG AND SD
-                    //   for (i = 0; i < 8; i++) {
-                    //       $("#avgSerie" + i).html("");
-                    //       $("#sdSerie" + i).html("");
-                    //   }
-
-                    // SET AVG AND SD
-                    //  setAvgSd()
-
                     // RUN ONLY IF APPDATA IS LOADED         
-                            displayComment = allPatComment.filter(x => (x.plot_date >= e.target.min && x.plot_date <= e.target.max));
-                            for (i = 0; i < displayComment.length; i++) {
-                                displayComment[i]['index'] = i + 1;
-                            }
-        
-                            addPatCommentDiv(displayComment);
-        
-                            if (e.max - e.min <= 2682000000) { // one month or less add comment numbers
-        
-                                addCommentNumbers();
-        
-                            } else {
-                                clearCommentNumbers()
-                            }
+                    displayComment = allPatComment.filter(x => (x.plot_date >= e.target.min && x.plot_date <= e.target.max));
+                    for (i = 0; i < displayComment.length; i++) {
+                        displayComment[i]['index'] = i + 1;
+                    }
+
+                    addPatCommentDiv(displayComment);
+
+                    if (e.max - e.min <= 2682000000) { // one month or less add comment numbers
+
+                        addCommentNumbers();
+
+                    } else {
+                        clearCommentNumbers()
+                    }
                 }
             },
 
@@ -524,17 +906,23 @@ function createChart(axisDataChart) {
                 text: "exporting"
             },
             buttons: {
+
                 contextButton: {
-                    menuItems: [
-                        {
-                            "text": '<span style="color:blue">Parameter Definition</span>', onclick:function() {document.getElementById("infoBtn").click()}
-                        },
-                        {
-                            "text": '<span style="color:blue">Help</span>',
-                            onclick:function() {document.getElementById("helpBtn").click()}
-                        }
-                    ]
+                    menuItems: exportMenu
                 }
+
+                //  contextButton: 
+                //  {
+                //     menuItems: [
+                //         {
+                //             "text": '<span style="color:blue">Parameter Definition</span>', onclick:function() {document.getElementById("infoBtn").click()}
+                //         },
+                //         {
+                //             "text": '<span style="color:blue">Help</span>',
+                //             onclick:function() {document.getElementById("helpBtn").click()}
+                //         }
+                //     ]
+                // }
             },
             //  width: 500,
             filename: chartTitle,
@@ -685,8 +1073,8 @@ function createChart(axisDataChart) {
     for (let i = 0; i < 7; i++) {
         initChart.yAxis.push({
             //  id: commentSeriesShortName[i],
-            min:5,
-            max:5,
+            min: 5,
+            max: 5,
             title: {
                 text: commentSeriesShortName[i]
             },
@@ -930,7 +1318,7 @@ function createChart(axisDataChart) {
         zones: [],
         marker: {
             enabled: true,
-            radius: 3
+            radius: 5
         },
         color: Highcharts.getOptions().colors[0],
         fillColor: {
@@ -960,17 +1348,28 @@ function createChart(axisDataChart) {
                 // JSON.parse(REST_DATA.selectedCsvData[0].sleepdata).Start_Date
                 // let rtTooltip = "";  headerFormat: "{point.x:%A, %b %e %Y}"
                 const recordedNight = REST_DATA.selectedCsvData.find(e => e.plot_date == this.x)
+                const ptime = moment(this.x).set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).add(1, "days") - 1;
                 if (!recordedNight) {
-                    return `<span style="color:red"> ${moment(this.x).format("ddd, MMM D YYYY")} <br/>No data </span>`
+                    document.getElementById("displayInfo").style.display = "none";
+                    return `<span style="color:red;text-decoration:underline">Night of ${moment(this.x).format("ddd, MMM D YYYY")} <br/>No data </span>`
+                } else {
+                    const csvData = JSON.parse(recordedNight.sleepdata)
+                    const start_time = moment(csvData.Sleep_Onset_SI.split(" ")[1], "hh:mm").format("HH:mm"); //moment(csvData.Sleep_Onset_SI.split(" ")[1], "hh:mm").format("hh:mm A")
+                    const end_time = moment(csvData.Sleep_Conclusion.split(" ")[1], "hh:mm").format("HH:mm"); // moment(csvData.Sleep_Conclusion.split(" ")[1], "hh:mm").format("hh:mm A")    
+
+                    const total_start_time = moment(csvData.Report_Start_Date.split(" ")[1], "hh:mm").format("HH:mm"); // csvData.Report_Start_Date.split(" ")[1].split(":")
+                    const total_end_time = moment(csvData.Report_End_Date.split(" ")[1], "hh:mm").format("HH:mm"); // csvData.Report_End_Date.split(" ")[1].split(":")
+
+                    const htmlDiv = `<span style="color:black;text-decoration:underline;font-weight:bold">Night of ${moment(this.x).format("ddd, MMM D")}</span><br/> 
+                    <span style="color:blue;">  ${total_start_time} - ${total_end_time} = ${decimalHoursToHHMM(this.y)} (recorded) </span><br/>
+                            <span style="color:red">  ${start_time} - ${end_time} = ${decimalHoursToHHMM(csvData.TST_Hour)} (sleep) </span>
+                    <br/> 
+                     <span style="color:green; font-weight:bold;font-style: italic; "> ${csvData.Mean_SpO2}, ${csvData.Min_SpO2} - ${csvData.Max_SpO2} (SpO2 μ, min-max) </span>
+                    `
+                    document.getElementById("displayInfoText").innerHTML = htmlDiv;
+                    document.getElementById("displayInfo").style.display = "block";
+                    return false;
                 }
-                const csvData = JSON.parse(recordedNight.sleepdata)
-                const start_time = moment(csvData.Sleep_Onset_SI.split(" ")[1], "hh:mm").format("hh:mm A")
-                const end_time = moment(csvData.Sleep_Conclusion.split(" ")[1], "hh:mm").format("hh:mm A")
-                return `${moment(this.x).format("ddd, MMM D YYYY")}<br/> ${start_time} - ${end_time} 
-                <br/> 
-                 <span style="color:blue;"> ${this.y} Hrs Recorded </span> <br/>
-                 <span style="color:green; font-weight:bold;font-style: italic; "> ${csvData.TST_Hour} Hrs Sleeptime </span>
-                `
             }
         }
         // , showInLegend:true
@@ -1005,7 +1404,7 @@ function createChart(axisDataChart) {
             elem.style.textAlign = `center`;
 
             const top = (chart.yAxis[i].reversed) ? chart.yAxis[i].toPixels(chart.yAxis[i].max) : chart.yAxis[i].toPixels(chart.yAxis[i].min);
-            const inc = (document.getElementById("mydatadiv").style.display == "none") ? 188 : 248;
+            const inc = (document.getElementById("mydatadiv").style.display == "none") ? 295 : 248;
 
             elem.style.top = `${top + inc}px`;
             elem.style.border = `1px ${yAxisColors[i]} solid`
@@ -1020,7 +1419,7 @@ function createChart(axisDataChart) {
 
         const rtAxis = chart.get("RT").yAxis;
         const tmpTop = rtAxis.toPixels(rtAxis.min)
-        const inc = (document.getElementById("mydatadiv").style.display == "none") ? 180 : 240;
+        const inc = (document.getElementById("mydatadiv").style.display == "none") ? 240 : 240;
 
         totalBackBtn[4].style.top = `${tmpTop + inc}px`;
         totalForwardBtn[4].style.top = `${tmpTop + inc}px`;
@@ -1059,7 +1458,7 @@ function createChart(axisDataChart) {
         }
     })
 
-    arrangeLegends();
+
 }
 
 function getCsvData(patient_id) { // may need to add clinic_id 
@@ -1071,15 +1470,11 @@ function getCsvData(patient_id) { // may need to add clinic_id
 
 Highcharts.setOptions({
     time: {
-        timezone: 'America/Chicago'
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
     }
 });
 
 function findMindMax2D(arr2D, axisName) {
-    // if (axisName == "Sleep_Onset") {
-    //     console.log({"min" : yScale[axisName].min, "max": yScale[axisName].max});
-    //     return{"min" : yScale[axisName].min, "max": yScale[axisName].max};
-    // }
     if (axisName.length == 0) return [];
     var yValues = arr2D.map(function (e) { return e[1] });
     let minMaxSingle = { "min": Math.min.apply(null, yValues), "max": Math.max.apply(null, yValues) };
@@ -1115,9 +1510,6 @@ function prepareChartforDownloadPDF(chart) {
     });
 }
 
-
-// A4 (595.28 x 841.89)
-// viewbox
 function downloadPDF(svg, outFileName, chartTitle, size, reportEvent, cb) {
     //userPassword :"hello"
     chart.setTitle(null, { text: '' });
@@ -1293,7 +1685,6 @@ function downloadFullReportPDF(size, reportEvent = false) {
     //arrangeLegends();
 }
 
-
 function addPAP() {
     let query = { trackerid: document.getElementById("selectedPatient").innerHTML.trim() },
         cpap = [], pressure = [];
@@ -1380,7 +1771,7 @@ function togglePapChart() {
         });
     }
 
-    arrangeLegends()
+
 }
 
 function getTransformSVG(element) {
@@ -1399,89 +1790,6 @@ function arrangeXLabel() {
 
     setTransformSVG(timeTooltip[0], timeBox[0], timeBox[1] - 300);
     timeText.style.top = (timeBox[1] - 300) + "px";
-}
-
-function arrangeLegends() {
-    let leftGroup = [2, 0, 1, 3], rightGroup = [6, 4, 5, 7], offsetX = 200, offsetY = 0, axisColorElem, axisElem, legend_i = 0;
-
-    let leftGroupXY = [8, 83]; // getTransformSVG(legendItem[0]);
-    let rightGroupXY = [500, 83]; // getTransformSVG(legendItem[2]);
-    let legendItem, legendItemAll = Array.from(document.querySelectorAll(".highcharts-legend-item"));
-    if (legendItemAll.length < 8) return;
-
-    let inc = -27;
-    for (let i of leftGroup) { // SET TRANSFORM
-        inc = inc + 27;
-        legendItem = legendItemAll.find(x => x.classList.contains("highcharts-series-" + i));
-        setTransformSVG(legendItem, leftGroupXY[0] + offsetX, leftGroupXY[1] + inc + offsetY);
-    }
-
-    inc = -27;
-
-    for (let i of rightGroup) { // SET TRANSFORM
-        inc = inc + 27;
-        legendItem = legendItemAll.find(x => x.classList.contains("highcharts-series-" + i));
-        setTransformSVG(legendItem, rightGroupXY[0] + offsetX, rightGroupXY[1] + inc + offsetY);
-        let legendLine = $(".highcharts-legend-item .highcharts-graph");
-        legendLine[i].setAttribute("stroke-width", 6);
-    }
-
-    let legendCheckboxArr = $(".highcharts-legend-checkbox"), legendBox, top, left, i = -1;
-
-    for (let i of leftGroup.concat(rightGroup)) { // SET LEGEND
-        legend_i = legendItemAll.findIndex(x => x.classList.contains("highcharts-series-" + i));
-        legendItem = legendItemAll.find(x => x.classList.contains("highcharts-series-" + i));
-        legendBox = legendCheckboxArr[legend_i];
-
-        //   window.scrollY, window.scrollX
-        top = legendItem.getBoundingClientRect().top - 43;
-        left = legendItem.getBoundingClientRect().left - 35;
-        if (legendBox) {
-            legendBox.style["top"] = top + "px";
-            legendBox.style["left"] = left + "px";
-        }
-
-
-        let axis_i = (i + 1);
-        axisElem = document.getElementById("btnAxis-" + axis_i);
-        axisColorElem = document.getElementById("axisColor-" + axis_i);
-        axisElem.style["top"] = (top + 45) + "px";
-        axisColorElem.style["top"] = (top + 45) + "px";
-        axisElem.innerHTML = '';
-
-        let legendLine = $(".highcharts-legend-item .highcharts-graph");
-        legendLine[i].setAttribute("stroke-width", 6);
-
-        if (axis_i < 5) {
-            axisElem.style["left"] = (left + 250) + "px";
-            axisColorElem.style["left"] = (left + 33) + "px";
-        } else {
-            axisElem.style["left"] = (left + 300) + "px";
-            axisColorElem.style["left"] = (left + 33) + "px";
-        }
-    }
-
-
-    legendItem = legendItemAll.find(x => x.classList.contains("highcharts-series-2"));;
-    top = legendItem.getBoundingClientRect().top - 20;
-    left = legendItem.getBoundingClientRect().left - 5;
-    document.getElementById("first-table").style.top = top - 10 + 'px';
-    document.getElementById("first-table").style.left = (left - 120) + "px";
-
-    axisColorElem = document.getElementById("axisColor-7");
-    left = axisColorElem.getBoundingClientRect().left;
-    top = axisColorElem.getBoundingClientRect().top;
-    document.getElementById("second-table").style.top = top - 30 + 'px';
-    document.getElementById("second-table").style.left = (left - 100) + "px";
-
-
-    // let l=0;
-    // let legendLine = $(".highcharts-legend-item .highcharts-graph");
-    // for (l=0; l< legendLine.length; l++){
-    //     legendLine[l].setAttribute("stroke-width", 0);
-    //     //legendLine[l].setAttribute("display", "none");
-    // }
-
 }
 
 function addCommentNumbers() {
@@ -1538,37 +1846,6 @@ function calculateYpositions(yMin, yMax) {
     return positions;
 }
 
-function drawTresholdPlotlines() {
-    let i = 0;
-
-    for (i = 0; i < chart.series.length; i++) {
-        let param = yScale[chart.series[i].name];
-        if (param == null) continue;
-        chart.yAxis[i].removePlotLine(i);
-        if (param.threshold) {
-            if (param.threshold < param.max) {
-                chart.yAxis[i].addPlotLine({
-                    value: param.threshold,
-                    dashStyle: 'shortdashdot',
-                    color: chart.series[i].color,
-                    width: 2,
-                    id: i
-                });
-            } else {
-                if (param.max < chart.yAxis[i].max) {
-                    chart.yAxis[i].addPlotLine({
-                        value: param.max,
-                        dashStyle: 'shortdashdot',
-                        color: chart.series[i].color,
-                        width: 2,
-                        id: i
-                    });
-                }
-            }
-        }
-    }
-}
-
 var toggleAxisExtremes = function (event) {
     if (event.target.userOptions.name.indexOf("Navigator") > -1) return;
     if (event.type === "show") {
@@ -1593,58 +1870,6 @@ var toggleAxisExtremes = function (event) {
     }
 }
 
-function toggleTracker() {
-    let i = 0;
-    for (i = 0; i < 8; i++) {
-        if (chart.series[i].name.indexOf('Navigator') > -1) continue;
-        chart.series[i].options.enableMouseTracking = document.getElementById("mouseTrackerSleep").checked;
-        //    series[i].checkbox.checked = document.getElementById("mouseTrackerSleep").checked;
-    }
-    // for (i = 8; i < 15; i++) {
-    //     if (series[i].name.indexOf('Navigator') > -1) continue;
-    //     series[i].options.enableMouseTracking = document.getElementById("mouseTrackerApp").checked;
-    // }
-
-}
-
-function checkLegendFomMouseTracking() {
-    let i = 0;
-    var series = chart.series;
-    for (i = 0; i < series.length; i++) {
-        if (series[i].name.indexOf('Navigator') > -1) continue;
-        if (series[i].checkbox)
-            series[i].checkbox.checked = series[i].options.enableMouseTracking;
-    }
-}
-
-function toggleShowAllLegend(show) {
-    for (var i = 0; i < 8; i++) {
-        (show) ? chart.series[i].show() : chart.series[i].hide();
-    }
-}
-
-function updateSerieColor(e) {
-    let elemId = Number(e.id.split("-")[1]);
-
-    chart.series[elemId - 1].update({
-        color: e.value
-    })
-
-    chart.yAxis[elemId - 1].update({
-        labels: {
-            style: {
-                color: document.getElementById('axisColor-' + elemId).value, // yAxisColors[x] ,
-            }
-        },
-        title: {
-            style: {
-                color: document.getElementById('axisColor-' + elemId).value,
-            }
-        }
-    })
-    arrangeLegends();
-}
-
 function setAvgSd() {
     if (REST_DATA.selectedCsvData.length == 0) return
     let xData = [], i = 0;
@@ -1667,33 +1892,9 @@ function setAvgSd() {
     }
 }
 
-
-function cmdStorageSettings() {
-    localStorage.removeItem('last-saved-chart')
-    localStorage.removeItem('subject-template')
-}
-
-function plotClicked() {
-    loadTemplateToHtml(getCurrentTemplate(), false);
-    cmdPlot(chart.xAxis[0].min, chart.xAxis[0].max)
-}
-
 function isNull(el) {
     return (el == null) || (el == 'undefined');
 }
-
-// function checkCode(e, v) {
-//     if (e.keyCode === 13) {
-//         fetch(`/checkcode?code=${document.getElementById("code").value.toUpperCase()}`).then(response => response.json())
-//         .then(data =>  {
-//             if (data) {
-//                 document.querySelector("#mydatadiv").style.display = "block";
-//                 if (chart) chart.destroy()
-//                // yScale = yScaleCode;
-//             }
-//         })
-//     }
-// }
 
 function codeEntered() {
     fetch(`/checkcode?code=${document.getElementById("code").value.toUpperCase()}`).then(response => response.json())
@@ -1721,4 +1922,28 @@ function chooseAxis(e) {
     //     min: minMaxSingle.min,
     //     max: minMaxSingle.max,
     // })    
+}
+
+function decimalHoursToHHMM(decimalHours) {
+    const n = new Date(0, 0);
+    n.setMinutes(+Math.round(decimalHours * 60));
+    const days = (n.getDate() - 1)
+    const hh = n.getHours()
+    let mm = n.getMinutes().toString();
+    if (mm.length < 2) mm = `0${n.getMinutes()}`;
+    return (`${hh}:${mm}`)
+}
+
+function openCity(evt, cityName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
 }

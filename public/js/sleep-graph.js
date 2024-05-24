@@ -300,31 +300,6 @@ function patDataArray(whichPat, whichAxis) {
   return { "dataArray": dataArr, "excluded": excluded };
 }
 
-function plotChartOld(patId) {
-
-  let i = 0, patDataObj = {};
-  //if (sleepData[patId] == null) return;
-
-  var axisDataChart = [];
-
-  for (i = 1; i < 9; i++) {
-    // let axisName = String($("#btnAxis-" + i ).html()).trim();
-    let axisName = String($("#btnAxis-" + i).val()).trim();
-
-    if (axisName.indexOf("Axis") < 0) // if Axis not empty or excluded
-    {
-      patDataObj = patDataArray(patId, axisName);
-      axisDataChart.push(patDataObj.dataArray);
-    } else {
-      axisDataChart.push([]);
-    }
-  }
-
-  $("#information").html("<b>Excluded records :</b> " + patDataObj.excluded + " records have recording times < " + $("#recTime").val());
-
-  createChart(axisDataChart);
-}
-
 
 function selectPatient(selectedPat) {
   Array.from(selectedPat.parentNode.children).forEach(e => { e.classList.remove("selected-patient") });
